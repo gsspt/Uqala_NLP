@@ -2,21 +2,22 @@
 """
 p1_4_logistic_regression_v80.py
 ─────────────────────────────────────────────────────────────────
-Entraîne une Régression Logistique avec 13 features v80 (empiriquement optimisées).
+Entraîne une Régression Logistique avec 27 features v80 (empiriquement optimisées).
 
-Changements depuis v79 (79 features → 13 features):
+Changements depuis v79 (79 features → 27 features):
   SUPPRIMÉS  : Toutes les features pédagogiques (hikma, contraste, validation, autorité, wasf)
+  SUPPRIMÉS  : E7_no_formal_isnad (false signal — isnads filtered in preprocessing)
   GARDÉS     : Junun core (f00-f14), morpho CAMeL (f65-f70)
-  EMPIRIQUES : 7 nouvelles features basées sur analyse corpus
+  EMPIRIQUES : 6 nouvelles features basées sur analyse corpus
 
 Architecture v80:
   - f00-f14    : JUNUN (15 features) — core concept
   - f65-f70    : MORPHO CAMeL (6 features) — working well from v79
-  - NEW 1-7    : Empirical features (scene, witness, dialogue, paradox, spaces, etc.)
+  - E1-E6      : Empirical features (scene, witness, dialogue, invocation, spaces)
 
 Pipeline :
   1. Charge dataset_raw.json
-  2. Extrait 13 features (15 junun + 6 morpho + 7 empirique) = 28 features total
+  2. Extrait 27 features (15 junun + 6 morpho + 6 empirique)
   3. Entraîne LR avec CV + optimisation C
   4. Sauvegarde + rapport détaillé
 
@@ -133,13 +134,9 @@ SACRED_SPACES = [
     'مسجد',        # 4.78% vs 2.28% = 2.09x
 ]
 
-# E7. Formal Isnad Chains (NEGATIVE SIGNAL)
-FORMAL_ISNAD = [
-    'أخبرنا',       # 0.00% (POS) vs 30.50% (NEG) = NEG 3050x
-    'حدثنا',        # 0.43% vs 52.76% = NEG 118x
-    'أنبأنا',       # 0.00% vs 7.44% = NEG 745x
-    'حدثني',        # 0.65% vs 13.68% = NEG 20x
-]
+# NOTE: Isnad filtering is handled by src/uqala_nlp/preprocessing/isnad_filter.py
+# E7 (no_formal_isnad) was REMOVED — isnads are preprocessed out
+# Including it was a false signal (data artifact)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # HELPER FUNCTIONS
@@ -241,10 +238,13 @@ def extract_junun_features_15(text):
 
     return features
 
-def extract_empirical_features_7(text):
+def extract_empirical_features_6(text):
     """
-    Extract 7 NEW EMPIRICAL features (E1-E7).
+    Extract 6 NEW EMPIRICAL features (E1-E6).
     Based on corpus analysis.
+
+    E7 (no_formal_isnad) REMOVED: isnads are filtered in preprocessing,
+    so this was a false signal (data artifact, not real pattern).
     """
     features = {}
     tokens = re.findall(r'[\u0621-\u064A\u0671-\u06D3]+', text)
@@ -258,11 +258,11 @@ def extract_empirical_features_7(text):
     witness_count = sum(text.count(v) for v in WITNESS_VERBS)
     features['E2_witness_verb_density'] = witness_count / n_tokens
 
-    # E3: Dialogue First-Person (قلت — very distinctive)
+    # E3: Dialogue First-Person (قلت — very distinctive 4.70x)
     dialogue_count = sum(text.count(v) for v in DIALOGUE_FIRST_PERSON)
     features['E3_dialogue_first_person_density'] = dialogue_count / n_tokens
 
-    # E4: Direct Address (يا + noun — strong signal)
+    # E4: Direct Address (يا + noun — very strong signal, ∞ ratio)
     has_direct_address = any(addr in text for addr in DIRECT_ADDRESS)
     features['E4_direct_address_presence'] = float(has_direct_address)
 
@@ -270,13 +270,9 @@ def extract_empirical_features_7(text):
     divine_count = sum(text.count(d) for d in DIVINE_PERSONAL)
     features['E5_divine_personal_intensity'] = min(float(divine_count), 5.0) / 5
 
-    # E6: Sacred / Liminal Spaces (presence)
+    # E6: Sacred / Liminal Spaces (presence, 40-100x ratios)
     has_sacred_space = any(loc in text for loc in SACRED_SPACES)
     features['E6_sacred_spaces_presence'] = float(has_sacred_space)
-
-    # E7: Formal Isnad Absence (NEGATIVE signal = presence of khbar narrative)
-    isnad_count = sum(text.count(i) for i in FORMAL_ISNAD)
-    features['E7_no_formal_isnad'] = float(isnad_count == 0)
 
     return features
 
@@ -331,14 +327,14 @@ def extract_morphological_features_6(text):
 
     return features
 
-def extract_all_features_28(text):
+def extract_all_features_27(text):
     """
-    Extract all 28 features (15 junun + 6 morpho + 7 empirical).
-    Total v80 feature set.
+    Extract all 27 features (15 junun + 6 morpho + 6 empirical).
+    Total v80 feature set (E7_no_formal_isnad removed).
     """
     junun = extract_junun_features_15(text)
     morpho = extract_morphological_features_6(text)
-    empirical = extract_empirical_features_7(text)
+    empirical = extract_empirical_features_6(text)
     return {**junun, **morpho, **empirical}
 
 def load_dataset(dataset_path):
@@ -354,7 +350,7 @@ def load_dataset(dataset_path):
     for i, item in enumerate(data):
         if (i+1) % 1000 == 0:
             print(f"    Extracting features: {i+1}/{len(data)}")
-        feat = extract_all_features_28(item['text_ar'])
+        feat = extract_all_features_27(item['text_ar'])
         X.append(list(feat.values()))
 
     X = np.array(X)
@@ -411,11 +407,10 @@ def train_lr(X, y, cv_folds=5):
         # Morphological (6)
         'f65_root_jnn_density', 'f66_root_aql_density', 'f67_root_hikma_density',
         'f68_verb_density', 'f69_noun_density', 'f70_adj_density',
-        # Empirical (7)
+        # Empirical (6) — E7_no_formal_isnad removed (false signal)
         'E1_scene_intro_presence', 'E2_witness_verb_density',
         'E3_dialogue_first_person_density', 'E4_direct_address_presence',
         'E5_divine_personal_intensity', 'E6_sacred_spaces_presence',
-        'E7_no_formal_isnad',
     ]
 
     report = {
@@ -443,7 +438,7 @@ if __name__ == '__main__':
     print(f"Loading data…")
     X, y = load_dataset(DATASET)
 
-    print(f"\nTraining LR (28 features: 15 junun + 6 morpho + 7 empirical)…")
+    print(f"\nTraining LR (27 features: 15 junun + 6 morpho + 6 empirical)…")
     clf, scaler, report = train_lr(X, y, cv_folds=args.cv)
 
     with open(CLF_PATH, 'wb') as f:
@@ -455,9 +450,10 @@ if __name__ == '__main__':
     print(f"Report saved → {REPORT_PATH}")
 
     print(f"\n{'='*60}")
-    print(f"TRAINING COMPLETE — v80")
+    print(f"TRAINING COMPLETE — v80 (REVISED)")
     print(f"{'='*60}")
-    print(f"Features: {report['n_features']} (15 junun + 6 morpho + 7 empirical)")
+    print(f"Features: {report['n_features']} (15 junun + 6 morpho + 6 empirical)")
+    print(f"  NOTE: E7_no_formal_isnad removed (false signal — isnads are preprocessed)")
     print(f"CV AUC: {report['cv_auc_mean']:.4f} ± {report['cv_auc_std']:.4f}")
     print(f"Test AUC: {report['test_auc']:.4f}")
     print(f"Best C: {report['best_c']}")
