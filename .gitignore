@@ -41,6 +41,10 @@ models/*.pkl
 models/*.joblib
 models/*.h5
 models/*.pt
+models/*.bin
+models/camelbert_finetuned/
+models/word2vec_openiti.bin
+models/active_learning/
 
 # Temporary/Cache
 .cache/
@@ -51,27 +55,25 @@ models/*.pt
 # CSV and intermediate data files
 *.csv
 
-# Analysis results (keep only final analysis files)
+# Results (volumineux — garder seulement les analyses finales)
 results/**/*.json
 !results/**/strict_analysis.json
 !results/**/llm_analysis.json
 !results/**/post_filtered_results.json
-src/openiti_detection/results/**/*.json
-!src/openiti_detection/results/**/strict_analysis.json
-!src/openiti_detection/results/**/llm_analysis.json
-!src/openiti_detection/results/**/post_filtered_results.json
+
+# Active learning checkpoints (intermédiaires)
+results/active_learning/cycle_*.pkl
 
 # Logs and output files
 *.log
 
-# Environment files
+# Environment files (ne JAMAIS commiter .env)
 .env
 .env.local
 .env.*.local
 
-# Jupyter notebooks (if used)
+# Jupyter checkpoints
 .ipynb_checkpoints/
-*.ipynb
 
 # Data backups and progress files
 dataset_*.backup.json
@@ -81,3 +83,8 @@ scan_progress.json
 # OS files
 .DS_Store
 Thumbs.db
+
+# Package build artifacts
+*.egg-info/
+dist/
+build/

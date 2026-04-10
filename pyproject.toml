@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "uqala-nlp"
+version = "0.2.0"
+description = "Détection computationnelle du motif maǧnūn ʿāqil dans les textes arabes classiques"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Augustin Pot", email = "" }
+]
+keywords = ["arabic", "nlp", "digital-humanities", "classical-arabic", "adab"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Text Processing :: Linguistic",
+    "Programming Language :: Python :: 3.10",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.23.0",
+    "pandas>=1.5.0",
+    "scikit-learn>=1.2.0",
+    "xgboost>=1.7.0",
+    "scipy>=1.10.0",
+    "camel-tools>=1.4.6",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+llm = ["openai>=1.0.0"]
+viz = ["matplotlib>=3.7.0", "shap>=0.42.0", "seaborn>=0.12.0"]
+deep = ["transformers>=4.30.0", "torch>=2.0.0", "gensim>=4.3.0"]
+dev = ["pytest>=7.4.0", "pytest-cov>=4.1.0", "ruff>=0.1.0"]
+all = ["uqala-nlp[llm,viz,deep,dev]"]
+
+[project.scripts]
+uqala-scan = "scripts.scan_corpus:main"
+uqala-annotate = "scripts.annotate:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]

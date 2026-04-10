@@ -1,0 +1,15 @@
+# Dépendances de développement
+pytest>=7.4.0
+pytest-cov>=4.1.0
+ruff>=0.1.0
+
+# Optionnel : visualisation avancée
+matplotlib>=3.7.0
+seaborn>=0.12.0
+shap>=0.42.0
+jupyter>=1.0.0
+ipython>=8.0.0
+
+# Optionnel : deep learning
+transformers>=4.30.0
+gensim>=4.3.0
