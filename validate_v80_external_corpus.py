@@ -277,7 +277,9 @@ def validate_v80(model_path, verbose=False, sample_size=None):
                         print(f"  Warning: got {len(features)} features instead of 27")
                     continue
 
-                feature_vector = np.array([features[k] for k in sorted(features.keys())]).reshape(1, -1)
+                # IMPORTANT: use insertion order (dict.values()), NOT sorted() —
+                # the model was trained with list(feat.values()) preserving insertion order
+                feature_vector = np.array(list(features.values())).reshape(1, -1)
 
                 # Scale if scaler is available
                 if scaler:
