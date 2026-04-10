@@ -1,291 +1,306 @@
 # Uqala NLP: Detecting the Wise Fool (ʿāqil majnūn) in Arabic Texts
 
-A machine learning system for identifying and analyzing the *ʿāqil majnūn* (wise fool / sage fool) figure in classical Arabic literature, particularly in the OpenITI corpus.
+A machine learning system for identifying the *ʿāqil majnūn* (wise fool / sage fool) figure in classical Arabic literature, particularly in the OpenITI corpus.
 
 **Author:** Augustin Pot  
----
-
-## 📚 Project Overview
-
-This project combines digital humanities and machine learning to:
-
-1. **Extract coherent narrative units** (akhbars) from OpenITI corpus
-2. **Train classification models** (Logistic Regression + XGBoost) to identify wise fool figures
-3. **Detect paradoxical wisdom** - statements that appear foolish but reveal deeper wisdom
-4. **Identify canonical fools** - named figures (Bahlul, Khalaf, Ja'ifran, etc.) from Islamic tradition
-
-### Key Features
-
-✅ **74-dimensional feature extraction**
-- 62 lexical features (junun markers, wisdom words, dialogue patterns)
-- 9 morphological features (CAMeL Tools POS, aspect, voice)
-- 3 additional wasf (descriptive text) markers
-
-✅ **Dual classifier system**
-- Logistic Regression: interpretable, ~0.83 AUC
-- XGBoost: high-performance, ~0.99 AUC
-
-✅ **Clean OpenITI metadata removal**
-- Removes ms####, PageV##, ^, %, [ ] markers
-- Produces coherent narrative units
-- Zero residual metadata corruption
-
-✅ **Post-classification filtering**
-- Reduces false positives from 82% → near 0%
-- Validates true majnun aqil characteristics
+**Affiliation:** IREMAM (Institut de Recherche et d'Études sur le Monde Arabe et Musulman), Aix-Marseille University  
+**Supervisor:** Hakan Özkan  
+**Updated:** 2026-04-10  
 
 ---
 
-## 📁 Project Structure
+## 📋 Quick Navigation
 
-```
-Uqala NLP/
-├── openiti_detection/              # Main detection pipeline (production-ready)
-│   ├── detect_lr_xgboost.py       # Core classifier (LR + XGBoost)
-│   ├── test_quick.py              # Quick test on single author
-│   ├── analyze_results.py          # Detailed analysis
-│   ├── strict_analysis.py          # Strict criteria analysis with canonical fool detection
-│   ├── post_filter.py              # Post-classification filtering
-│   ├── verify_extraction.py        # Verify akhbar extraction quality
-│   ├── verify_feature_extraction.py # Verify feature generation
-│   ├── show_majnun_examples.py    # Display detected examples
-│   ├── llm_analysis.py             # LLM-based qualitative analysis
-│   ├── analyze_false_positives.py  # Analysis of false positives
-│   └── results/                    # Predictions and analysis outputs
-│
-├── scan/                           # Model training (from dataset_raw.json)
-│   ├── build_features_*.py         # Feature extraction for training
-│   ├── train_classifier.py         # Model training scripts
-│   ├── lr_classifier_*.pkl         # Trained LR models
-│   └── lr_report_*.json            # Training reports
-│
-├── comparison_ensemble/             # XGBoost ensemble results
-│   ├── train_xgboost.py           # XGBoost training
-│   ├── xgb_classifier_*.pkl       # Trained XGBoost models
-│   └── results/                    # Ensemble results
-│
-├── approche_*/                      # Alternative approaches (archived)
-│   ├── approche_features/          # Feature-based classification
-│   ├── approche_tfidf/             # TF-IDF baseline
-│   ├── approche_bert/              # BERT fine-tuning
-│   └── approche_actantielle/       # Actantial model
-│
-├── dataset_raw.json                # Training dataset (1,221 labeled texts)
-├── isnad_filter.py                 # Isnad filtering utility
-├── corpus/                         # Utility corpus samples
-│
-├── Documentation/
-│   ├── README.md                   # This file
-│   ├── EXTRACTION_IMPROVEMENTS.md  # Metadata cleaning solutions
-│   ├── VERIFICATION_COMPLETE.md    # Pipeline verification results
-│   ├── ANALYSIS_FALSE_POSITIVES.md # False positive analysis & recommendations
-│   ├── WORKFLOW.md                 # Complete workflow documentation
-│   └── features_catalog_*.md       # Feature documentation
-│
-└── .gitignore                      # Git exclusions
-```
+- **New to the project?** Start with [INDEX.md](INDEX.md) or [COMPREHENSIVE_GUIDE.md](COMPREHENSIVE_GUIDE.md)
+- **Need technical details?** See [COMPREHENSIVE_GUIDE.md](COMPREHENSIVE_GUIDE.md)
+- **Understand the workflow?** Read [WORKFLOW.md](WORKFLOW.md)
+- **Want to improve the model?** Check [ANALYSIS_FALSE_POSITIVES.md](ANALYSIS_FALSE_POSITIVES.md)
+- **Feature documentation?** See [features_catalog_majnun_aqil.md](features_catalog_majnun_aqil.md)
+
+---
+
+## 🎯 Project Overview
+
+This project combines **digital humanities** and **machine learning** to detect the paradoxical wise fool figure in classical Arabic texts:
+
+- **Surface level:** Appears foolish, mad (جنون/junun)
+- **Deep level:** Possesses wisdom, insight (عقل/ʿaql, حكمة/ḥikma)
+- **Key insight:** Paradox — contradiction between appearance and reality
+
+### ✅ What We've Built
+
+**Dual Classification System:**
+- ✅ **Logistic Regression:** AUC 0.804 (interpretable)
+- ✅ **XGBoost Ensemble:** AUC 0.991 (high-performance)
+- ✅ **Consensus Strategy:** F1 = 0.98 (very reliable)
+
+**Feature Engineering (71 dimensions):**
+- ✅ 62 lexical features (junun markers, wisdom words, dialogue patterns)
+- ✅ 9 morphological features (POS tags, aspect, voice via CAMeL Tools)
+
+**Pipeline Quality:**
+- ✅ Akhbar extraction: 7,400-10,000+ texts per author
+- ✅ Metadata cleaning: 100% clean (0% corruption)
+- ✅ Extraction coherence: 94% (verified by LLM)
+- ✅ Post-classification filtering: Reduces FP 82% → 0%
+
+**Results on Ibn ʿAbd Rabbih (Al-Iqd al-Farid, 10,113 texts):**
+- 100 canonical fools detected (0.99% of corpus)
+- 874 true majnun aqil candidates (8.64%)
+- 114 reliable positives after post-filtering (2.5%)
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Installation
+
 ```bash
-pip install numpy scikit-learn xgboost camel-tools
+# 1. Clone the repository
+git clone https://github.com/gsspt/Uqala_NLP.git
+cd Uqala_NLP
+
+# 2. Create virtual environment
+python -m venv venv
+source venv/Scripts/activate      # Windows
+# or: source venv/bin/activate     # Linux/Mac
+
+# 3. Install dependencies
+pip install -r requirements.txt
 ```
 
-### 1. Test on Single Author
+### Run a Quick Test
 
 ```bash
-cd openiti_detection
+# Test on Ibn ʿAbd Rabbih (requires openiti_corpus/)
+cd src/openiti_detection
 python test_quick.py 0328IbnCabdRabbih
-```
 
-Output: predictions for all akhbars from this author
-
-### 2. Detailed Analysis
-
-```bash
+# Strict analysis with canonical fool detection
 python strict_analysis.py 0328IbnCabdRabbih --threshold-lr 0.7 --threshold-xgb 0.7
-```
 
-Detects:
-- Canonical wise fools (named figures)
-- True majnun aqil (paradoxical wisdom)
-- False positives (dialogue-only texts)
-
-### 3. View Examples
-
-```bash
-python show_majnun_examples.py 0328IbnCabdRabbih
-```
-
-Shows concrete examples from corpus
-
-### 4. Verify Quality
-
-```bash
-python verify_extraction.py openiti_targeted/0328IbnCabdRabbih/...
+# Verify pipeline quality
+python verify_extraction.py
 python verify_feature_extraction.py
 ```
 
 ---
 
-## 📊 Results on Ibn ʿAbd Rabbih (Al-Iqd al-Farid)
+## 📁 Repository Structure
 
-### Raw Classification (LR ≥0.7 + XGB ≥0.7)
 ```
-Total texts: 10,113
-├─ Consensus positives: 4,646 (54.6%)
-├─ Canonical fools (named): 100 (0.99%)
-├─ True majnun aqil: 874 (8.64%)
-└─ False positives: 3,408 (33.70%)
-```
-
-### After Post-Classification Filtering
-```
-Reliable positives: 114 (2.5%)
-├─ Canonical fools: 98 (0.99%)
-└─ True majnun aqil: 16 (0.3%)
-
-False positives reduced: 82% → 0%
+Uqala-NLP/
+├── src/                              # All production code
+│   ├── openiti_detection/           # Main detection pipeline
+│   │   ├── detect_lr_xgboost.py    # Core classifier
+│   │   ├── strict_analysis.py      # Strict analysis + canonical fool detection
+│   │   ├── post_filter.py          # Post-classification filtering (reduces FP)
+│   │   ├── test_quick.py           # Quick test script
+│   │   └── results/                # Analysis outputs
+│   │       └── 0328IbnCabdRabbih/  # Results for Ibn ʿAbd Rabbih
+│   │
+│   ├── scan/                        # Model training & feature extraction
+│   │   ├── build_features_71.py    # 71-D feature extraction
+│   │   ├── build_features_50.py    # 50-D feature extraction (legacy)
+│   │   ├── lr_classifier_71features.pkl    # Trained LR model
+│   │   ├── xgb_classifier_71features.pkl   # Trained XGBoost model
+│   │   └── scan_openiti_lr_71features.py   # Scanning script
+│   │
+│   ├── comparison_ensemble/        # XGBoost training & comparison
+│   │
+│   └── isnad_filter.py            # Utility: extract narrative content
+│
+├── data/                            # Training datasets
+│   ├── dataset_raw.json            # Original training data (1,221 texts)
+│   └── Kitab_Uqala_al_Majanin_annotated.json  # New dataset (4.8 MB)
+│
+├── docs/                            # Documentation
+│   ├── INDEX.md                    # Documentation hub
+│   ├── COMPREHENSIVE_GUIDE.md      # Complete technical guide
+│   ├── WORKFLOW.md                 # Workflow & development history
+│   ├── ANALYSIS_FALSE_POSITIVES.md # FP analysis & solutions
+│   ├── features_catalog_majnun_aqil.md  # Feature documentation
+│   └── archived/                   # Historical docs
+│
+├── openiti_corpus/                  # OpenITI corpus (28GB, not in git)
+├── venv/                            # Virtual environment (not in git)
+├── requirements.txt                 # Python dependencies
+└── .gitignore                       # Git exclusions
 ```
 
 ---
 
-## 🔬 Method
+## 📊 Key Results
 
-### Feature Engineering (74 features)
+### Performance Metrics
+
+| Model | AUC | F1 | Notes |
+|-------|-----|-----|-------|
+| LR (71-D) | 0.804 | 0.75 | Interpretable, under improvement |
+| XGBoost (71-D) | 0.991 | 0.98 | Best performance |
+| LR (50-D) | 0.849 | 0.83 | Better baseline (legacy) |
+| **Consensus** | — | **0.98** | Both models agree (very reliable) |
+
+### Analysis Results (Ibn ʿAbd Rabbih)
+
+**Raw Classification (LR ≥ 0.7 + XGB ≥ 0.7):**
+```
+Total texts analyzed: 10,113
+├─ Consensus positives: 4,646 (54.6%)
+│  ├─ Canonical fools: 100 (0.99%)
+│  ├─ True majnun aqil: 874 (8.64%)
+│  └─ False positives: 3,408 (82%) ← dialogue without paradox
+└─ Consensus negatives: 5,467 (45.4%)
+```
+
+**After Post-Classification Filtering:**
+```
+Reliable positives: 114 (2.5% of corpus)
+├─ Canonical fools: 98 (0.99%)
+└─ True majnun aqil: 16 (0.3%)
+
+False positives reduced: 82% → 0% ✅
+```
+
+### Canonical Fool Detection
+
+Named wise fool figures detected in Al-Iqd al-Farid:
+- **Khalaf (خلاف):** 72 instances
+- **Riyah (رياح):** 13 instances
+- **Ligit (لقيط):** 8 instances
+- **Ja'ifran (جعيفران):** 4 instances
+- **Alyan (عليان):** 2 instances
+- **Bahlul (بهلول):** 1 instance
+
+---
+
+## 🔬 Technical Approach
+
+### Feature Engineering (71 dimensions)
 
 **Lexical Features (62):**
-- Junun markers (15): جنون, مجنون, معتوه, حيون, etc.
-- Intelligence/wisdom (8): عقل, حكمة, فقيه, درايه
+- Junun markers (15): جنون, مجنون, معتوه, etc.
+- Intelligence/wisdom (8): عقل, حكمة, فقيه, etc.
 - Dialogue patterns (11): قال, سؤال, جواب
 - Validation markers (8): ضحك, بكاء, هدية
 - Contrast/paradox (5): ولكن, إلا, لكن
-- Authority/sources (4): قال الحكماء, قال...
+- Authority/sources (4): attribution patterns
 - Poetry (3): شعر, بيت, قافية
 - Wasf/lexicographic (3): ومنها, تقول العرب
 
 **Morphological Features (9):**
 - Root density (ج.ن.ن, ع.ق.ل, ح.ك.م)
-- POS tags (verb, noun, adjective)
-- Aspect (perfect, imperfect)
-- Voice (passive)
+- POS tags: verb, noun, adjective densities
+- Aspect: perfect/imperfect
+- Voice: passive voice ratio
 
-**Additional (3):**
-- Wasf text markers
-- Negation context
-- Temporal markers
+### Pipeline Architecture
 
-### Classification Models
-
-| Model | AUC | F1 | Notes |
-|-------|-----|-----|-------|
-| Logistic Regression (71 features) | 0.804 | 0.75 | Interpretable, currently under improvement |
-| XGBoost Ensemble (71 features) | 0.991 | 0.98 | High performance |
+```
+OpenITI Corpus
+    ↓ [Akhbar Extraction]
+Coherent narrative units (7,400-10,000+ per author)
+    ↓ [Metadata Cleaning]
+100% clean texts (0% corruption)
+    ↓ [Isnad Filtering]
+Pure narrative content
+    ↓ [Feature Extraction - 71D]
+Feature vectors
+    ↓ [Classification - LR + XGBoost]
+Probabilities (0.0-1.0)
+    ↓ [Consensus Filtering]
+Agreement check (both ≥ 0.7)
+    ↓ [Post-Classification Filtering]
+Validate majnun characteristics
+    ↓ [Output]
+Canonical fools, true majnun aqil, confidence scores
+```
 
 ---
 
-## 🔧 Key Improvements
+## ⚠️ Known Issues & Solutions
 
-### 1. OpenITI Metadata Cleaning ✅
-- Removed: ms####, PageV##P###, ^, %, [ ], | markers
-- Impact: 100% metadata-clean akhbars, 10× coherence improvement
+### Issue 1: High False Positive Rate (82%)
 
-### 2. Isnad Filtering ✅
-- Applied `get_matn()` to extract narrative content
-- Removed transmission chains from texts
+**Problem:** Classifiers learn "dialogue = majnun" instead of "paradox = majnun"
 
-### 3. Post-Classification Filtering ✅
-- Validates majnun aqil characteristics post-prediction
-- Reduces false positives from 82% → 0% for accepted texts
+**Solution (Implemented):**
+- ✅ Post-classification filtering: Validates actual majnun characteristics
+- ✅ Reduces FP from 82% → 0% for accepted texts
 
-### 4. Planned Improvements 📋
-- Add paradox-specific features
-- Implement author-aware thresholding
-- Improve irony/sarcasm detection
+**Future Improvements:**
+- Two-tier thresholding (different thresholds per text characteristics)
+- Explicit paradox/irony features
+- Corpus-aware baselines (different expectations per author)
+
+See [ANALYSIS_FALSE_POSITIVES.md](ANALYSIS_FALSE_POSITIVES.md) for details.
+
+### Issue 2: LR Model Regression (AUC 0.804 vs 0.849)
+
+**Problem:** 71-D model underperforms 50-D model due to 42 zero-padding features
+
+**Solution (In Progress):**
+- Replace zero-padding with real features
+- Restore missing morphological variants
+- Re-optimize parameter C
+
+See [COMPREHENSIVE_GUIDE.md](COMPREHENSIVE_GUIDE.md#improvement-roadmap) for detailed roadmap.
 
 ---
 
-## 📖 Documentation
+## 🛣️ Improvement Roadmap
 
-- **[EXTRACTION_IMPROVEMENTS.md](EXTRACTION_IMPROVEMENTS.md)** - How we fixed text extraction
-- **[VERIFICATION_COMPLETE.md](VERIFICATION_COMPLETE.md)** - Pipeline verification results
-- **[ANALYSIS_FALSE_POSITIVES.md](ANALYSIS_FALSE_POSITIVES.md)** - False positive analysis & solutions
-- **[WORKFLOW.md](WORKFLOW.md)** - Complete workflow (training → detection → analysis)
+| Phase | Task | Timeline | Status |
+|-------|------|----------|--------|
+| 1 | Fix 71-D LR classifier (AUC 0.804 → >0.85) | 1-2 weeks | 🔴 Blocked |
+| 2 | Two-tier thresholding (capture more true majnun) | 1 week | 📋 Planned |
+| 3 | Explicit paradox features | 2 weeks | 📋 Planned |
+| 4 | Corpus-aware baseline | 2-3 weeks | 📋 Planned |
 
----
-
-## 🎯 Performance Metrics
-
-### Extraction Quality
-```
-✅ Akhbars extracted: 7,400-10,000+ per author
-✅ Average coherence: 94% (verified by LLM)
-✅ Metadata corruption: 0%
-✅ Complete narrative units: 80%
-```
-
-### Classification Performance
-```
-Training set (1,221 labeled texts):
-├─ Positive: 460 (37.7%)
-├─ Negative: 761 (62.3%)
-└─ Class balance: 1:1.65
-
-Test performance:
-├─ LR AUC: 0.804
-├─ XGB AUC: 0.991
-└─ Consensus F1: 0.98
-```
-
-### Canonical Fool Detection
-```
-Ibn ʿAbd Rabbih corpus (10,113 texts):
-├─ Khalaf (خلاف): 72 instances
-├─ Riyah (رياح): 13 instances
-├─ Ligit (لقيط): 8 instances
-├─ Ja'ifran (جعيفران): 4 instances
-├─ Alyan (عليان): 2 instances
-└─ Bahlul (بهلول): 1 instance
-```
+See [COMPREHENSIVE_GUIDE.md](COMPREHENSIVE_GUIDE.md#improvement-roadmap) for detailed plans.
 
 ---
 
 ## 💡 Key Insights
 
-1. **Dialogue alone is not majnun aqil** - The classifier initially over-weighted dialogue patterns. Post-filtering now validates actual paradoxical wisdom.
-
-2. **Canonical fools are rare but identifiable** - Named figures appear in ~1% of corpus but with high confidence (LR=1.0, XGB=0.8+)
-
-3. **True majnun aqil requires paradox** - Wise fool figures show contradiction between surface appearance (foolishness) and deeper wisdom.
-
-4. **Corpus diversity matters** - Al-Iqd al-Farid (entertainment anthology) has different majnun aqil rate than historical compilations.
+1. **Dialogue alone ≠ majnun aqil** — Post-filtering validates actual paradoxical wisdom
+2. **Canonical fools are rare but identifiable** — ~1% of corpus, high confidence
+3. **True majnun requires paradox** — Contradiction between foolishness and wisdom
+4. **Corpus diversity matters** — Entertainment anthology (Al-Iqd) vs historical compilations have different rates
 
 ---
 
-## 📋 Citation
+## 📚 Training Data
 
-If you use this project in research, please cite:
+**Original Dataset (dataset_raw.json):**
+- 1,221 texts
+- 460 positive (37.7%)
+- 761 negative (62.3%)
+- Class balance: 1:1.65 (imbalanced, handled via `class_weight='balanced'`)
 
-```bibtex
-@software{Pot2024MajnunAqil,
-  author = {Pot, Augustin},
-  title = {Uqala NLP: Detecting the Wise Fool in Classical Arabic Texts},
-  year = {2024},
-  institution = {IREMAM, Aix-Marseille University},
-  note = {Available at: https://github.com/[username]/Uqala-NLP}
-}
-```
+**New Dataset (Kitab_Uqala_al_Majanin_annotated.json):**
+- 4.8 MB (not yet integrated)
+- To be merged and models retrained
+
+---
+
+## 📖 Full Documentation
+
+- **[INDEX.md](INDEX.md)** — Documentation navigation
+- **[COMPREHENSIVE_GUIDE.md](COMPREHENSIVE_GUIDE.md)** — Complete technical guide (this is where you need to be!)
+- **[WORKFLOW.md](WORKFLOW.md)** — Development workflow & history
+- **[ANALYSIS_FALSE_POSITIVES.md](ANALYSIS_FALSE_POSITIVES.md)** — FP analysis & 4 improvement strategies
+- **[VERIFICATION_COMPLETE.md](VERIFICATION_COMPLETE.md)** — Pipeline verification results
+- **[features_catalog_majnun_aqil.md](features_catalog_majnun_aqil.md)** — 153 features documented
+- **[guide_morphologie.md](guide_morphologie.md)** — Morphology guide (CAMeL Tools)
 
 ---
 
 ## 🤝 Contributing
 
-Contributions welcome! Areas of interest:
+Areas of interest:
 - Additional classical Arabic corpora
-- Improved paradox detection features
+- Improved paradox/irony detection features
 - Author-specific tuning
 - Interactive visualization tools
 
@@ -295,21 +310,24 @@ Contributions welcome! Areas of interest:
 
 **Augustin Pot**  
 IREMAM, Aix-Marseille University  
-Director: Hakan Özkan
+Supervisor: Hakan Özkan
 
 ---
 
 ## 📝 License
 
-[Choose appropriate license - MIT, CC-BY, etc.]
+[To be specified - MIT, CC-BY, etc.]
 
 ---
 
 ## Changelog
 
-### v0.2 (Current - April 2024)
+### v0.2 (Current - April 2026)
+- ✅ Repository reorganized (src/, data/, docs/, models/)
+- ✅ Virtual environment with all dependencies
+- ✅ COMPREHENSIVE_GUIDE.md created (complete documentation)
 - ✅ Post-classification filtering implemented
-- ✅ False positive analysis & solutions
+- ✅ False positive analysis & solutions documented
 - ✅ Complete pipeline verification
 - ✅ Metadata cleaning validated
 
