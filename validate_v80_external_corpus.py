@@ -184,9 +184,9 @@ def load_ibn_rabbih_texts():
         print(f"ERROR: Ibn Rabbih corpus not found at {IBN_RABBIH}")
         return []
 
-    # Find all text files (not .yml, not README)
+    # Find all text files (not .yml, not README, not .md)
     text_files = [f for f in IBN_RABBIH.glob('*')
-                  if f.is_file() and not f.suffix == '.yml' and not f.name.startswith('README')]
+                  if f.is_file() and not f.suffix in ['.yml', '.md'] and not f.name.startswith('README')]
 
     print(f"Found {len(text_files)} text files in Ibn Rabbih corpus")
 
@@ -224,7 +224,7 @@ def split_text_into_passages(text, window_size=500, step_size=250):
 
     return passages
 
-def validate_v80(model_path, verbose=False):
+def validate_v80(model_path, verbose=False, sample_size=None):
     """Load v80 model and make predictions on Ibn Rabbih corpus"""
 
     # Load model
@@ -234,7 +234,16 @@ def validate_v80(model_path, verbose=False):
 
     try:
         with open(model_path, 'rb') as f:
-            clf = pickle.load(f)
+            model_data = pickle.load(f)
+
+        # Handle both dict format (with scaler) and direct model format
+        if isinstance(model_data, dict) and 'clf' in model_data:
+            clf = model_data['clf']
+            scaler = model_data.get('scaler', None)
+        else:
+            clf = model_data
+            scaler = None
+
         print(f"✅ Loaded model from {model_path.name}")
     except Exception as e:
         print(f"ERROR loading model: {e}")
@@ -254,10 +263,25 @@ def validate_v80(model_path, verbose=False):
         print(f"  Processing {idx+1}/{len(texts)}: {text_info['filename']}")
         passages = split_text_into_passages(text_info['text'])
 
+        # Limit to sample size if specified
+        if sample_size:
+            passages = passages[:sample_size]
+
         for passage in passages:
             try:
                 features = extract_all_features_27(passage)
+
+                # Check if we have all 27 features
+                if len(features) != 27:
+                    if verbose:
+                        print(f"  Warning: got {len(features)} features instead of 27")
+                    continue
+
                 feature_vector = np.array([features[k] for k in sorted(features.keys())]).reshape(1, -1)
+
+                # Scale if scaler is available
+                if scaler:
+                    feature_vector = scaler.transform(feature_vector)
 
                 # Predict
                 pred_proba = clf.predict_proba(feature_vector)[0, 1]
@@ -272,8 +296,10 @@ def validate_v80(model_path, verbose=False):
                 })
                 all_texts.append(passage)
             except Exception as e:
+                print(f"  Error in passage processing: {e}", file=sys.stderr)
                 if verbose:
-                    print(f"  Warning: feature extraction failed: {e}")
+                    import traceback
+                    traceback.print_exc()
                 continue
 
     return all_predictions
@@ -287,6 +313,8 @@ def main():
     parser.add_argument('--model', choices=['v80', 'v79'], default='v80',
                         help='Model to test (default: v80)')
     parser.add_argument('--verbose', action='store_true', help='Verbose output')
+    parser.add_argument('--sample', type=int, default=None,
+                        help='Limit passages to N per text file (default: all)')
     args = parser.parse_args()
 
     # Select model
@@ -297,13 +325,21 @@ def main():
 
     print(f"Testing {args.model} on Ibn Abd Rabbih external corpus")
     print(f"Model: {model_path}")
-    print(f"CAMeL Tools: {'✅ Available' if HAS_CAMEL else '⚠️  Not available (degraded mode)'}\n")
+    print(f"CAMeL Tools: {'✅ Available' if HAS_CAMEL else '⚠️  Not available (degraded mode)'}")
+    if args.sample:
+        print(f"Sample mode: {args.sample} passages per text\n")
+    else:
+        print("")
 
     # Validate
-    predictions = validate_v80(model_path, verbose=args.verbose)
+    predictions = validate_v80(model_path, verbose=args.verbose, sample_size=args.sample)
 
     if not predictions:
-        print("ERROR: Could not generate predictions")
+        print("ERROR: Could not generate predictions (no passages processed)")
+        return 1
+
+    if len(predictions) == 0:
+        print("ERROR: No predictions generated")
         return 1
 
     # Analysis
