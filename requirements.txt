@@ -1,0 +1,25 @@
+# Core Data Science
+numpy>=1.23.0
+pandas>=1.5.0
+scikit-learn>=1.2.0
+
+# Machine Learning
+xgboost>=1.7.0
+scipy>=1.10.0
+
+# NLP & Linguistics
+camel-tools>=1.4.6
+
+# Utilities
+tqdm>=4.65.0
+
+# Optional: LLM Analysis
+openai>=0.27.0
+
+# Optional: Visualization & Explainability
+matplotlib>=3.7.0
+shap>=0.42.0
+
+# Development (for notebooks and analysis)
+jupyter>=1.0.0
+ipython>=8.0.0
