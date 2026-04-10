@@ -10,8 +10,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
 parts/
 sdist/
 var/
@@ -28,7 +26,6 @@ venv/
 ENV/
 env/
 .venv
-camel_env/
 
 # IDE
 .vscode/
@@ -38,32 +35,49 @@ camel_env/
 *~
 .DS_Store
 
-# Large Files (OpenITI corpus - download separately)
+# Large Files & External Data
 openiti_corpus/
+models/*.pkl
+models/*.joblib
+models/*.h5
+models/*.pt
 
 # Temporary/Cache
 .cache/
 *.cache
 *.tmp
+.DS_Store
 
-# Intermediate results (not needed after training)
+# CSV and intermediate data files
 *.csv
+
+# Analysis results (keep only final analysis files)
 results/**/*.json
 !results/**/strict_analysis.json
 !results/**/llm_analysis.json
 !results/**/post_filtered_results.json
+src/openiti_detection/results/**/*.json
+!src/openiti_detection/results/**/strict_analysis.json
+!src/openiti_detection/results/**/llm_analysis.json
+!src/openiti_detection/results/**/post_filtered_results.json
 
-# Model checkpoints and logs
+# Logs and output files
 *.log
-*.model
-*.bin
 
 # Environment files
+.env
 .env.local
 .env.*.local
 
-# Data backups
-dataset_*.backup.json
+# Jupyter notebooks (if used)
+.ipynb_checkpoints/
+*.ipynb
 
-# Progress/temporary files
+# Data backups and progress files
+dataset_*.backup.json
 *_progress.json
+scan_progress.json
+
+# OS files
+.DS_Store
+Thumbs.db
