@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-train_xgboost_71features.py
-────────────────────────────
-Entraîne un classifier XGBoost avec 71 features pour comparaison avec LR.
+p2_1_random_forest_shap.py  (ex train_xgboost_71features.py)
+──────────────────────────────────────────────────────────────
+Entraîne un classifier XGBoost avec 79 features (v79) pour comparaison avec LR.
 
-Utilise les mêmes 71 features que build_features_71.py pour une comparaison fair.
+Utilise les mêmes 79 features que p1_3_logistic_regression.py.
 
 Pipeline:
-  1. Charge dataset_raw.json et extrait features via build_features_71
-  2. Entraîne XGBoost avec hyperparamètres optimisés
-  3. Validation croisée 10-fold
+  1. Charge dataset_raw.json et extrait features via p1_3_logistic_regression
+  2. Entraîne XGBoost avec hyperparamètres optimisés + régularisation renforcée
+  3. Validation croisée 5-fold
   4. Sauvegarde modèle + rapport + feature importance
 
 Usage:
-  python comparison_ensemble/train_xgboost_71features.py --cv 10
+  python pipelines/level2_semi_interpretable/p2_1_random_forest_shap.py --cv 5
 """
 
 import json
@@ -29,17 +29,17 @@ import xgboost as xgb
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-# Import feature extraction from build_features_71
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "scan"))
-from build_features_71 import extract_features_71
+# Import feature extraction depuis p1_3_logistic_regression (79 features v79)
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "level1_interpretable"))
+from p1_3_logistic_regression import extract_features_71
 
-BASE         = pathlib.Path(__file__).parent.parent
-DATASET      = BASE / "dataset_raw.json"
-OUT_DIR      = pathlib.Path(__file__).parent / "results"
+BASE         = pathlib.Path(__file__).resolve().parent.parent.parent  # repo root
+DATASET      = BASE / "data" / "raw" / "dataset_raw.json"
+OUT_DIR      = BASE / "models"
 OUT_DIR.mkdir(exist_ok=True)
 
-XGB_MODEL_PATH  = OUT_DIR / "xgb_classifier_71features.pkl"
-XGB_REPORT_PATH = OUT_DIR / "xgb_report_71features.json"
+XGB_MODEL_PATH  = OUT_DIR / "xgb_classifier_79features.pkl"
+XGB_REPORT_PATH = OUT_DIR / "xgb_report_79features.json"
 
 def load_dataset(dataset_path):
     """Charge dataset et extrait features (réutilise build_features_71)"""
@@ -73,15 +73,20 @@ def train_xgboost(X, y, cv_folds=5):
     X_scaled = scaler.fit_transform(X)
     X_scaled = np.nan_to_num(X_scaled, nan=0.0, posinf=0.0, neginf=0.0)
 
-    # Hyperparamètres optimisés pour classification déséquilibrée
+    # Hyperparamètres avec régularisation renforcée pour éviter l'overfit
     # (460 positifs / 3817 négatifs = ratio 1:8.3)
+    # Ancien modèle : CV AUC=0.846, Test AUC=0.991 → overfit sévère
+    # Corrections : max_depth 5→3, n_estimators 100→200, reg_alpha/lambda ajoutés
     clf = xgb.XGBClassifier(
         objective='binary:logistic',
-        max_depth=5,
-        learning_rate=0.1,
-        n_estimators=100,
-        subsample=0.8,
-        colsample_bytree=0.8,
+        max_depth=3,           # réduit pour moins de variance
+        learning_rate=0.05,    # plus lent = meilleure généralisation
+        n_estimators=200,      # plus d'itérations pour compenser lr faible
+        subsample=0.7,         # réduit pour moins de variance
+        colsample_bytree=0.7,  # idem
+        reg_alpha=0.1,         # L1 — nouveau
+        reg_lambda=1.0,        # L2 — renforci
+        min_child_weight=5,    # évite les feuilles sur peu de données
         random_state=42,
         scale_pos_weight=sum(y == 0) / sum(y == 1),  # Équilibre les classes
         eval_metric='auc',
@@ -110,7 +115,7 @@ def train_xgboost(X, y, cv_folds=5):
     y_pred = clf.predict(X_test)
     report = classification_report(y_test, y_pred, output_dict=True)
 
-    # Build feature names
+    # Build feature names (v79 — identique à p1_3_logistic_regression.py)
     feat_names = [
         'f00_has_junun', 'f01_junun_density', 'f02_famous_fool', 'f03_junun_count',
         'f04_junun_specialized', 'f05_junun_position', 'f06_junun_in_title',
@@ -122,7 +127,8 @@ def train_xgboost(X, y, cv_folds=5):
         'f22_aql_positive',
         'f23_has_hikma', 'f24_hikma_density', 'f25_hikma_junun_prox',
         'f26_hikma_qala_prox', 'f27_hikma_in_title',
-        'f28_has_qala', 'f29_qala_density', 'f30_has_first_person',
+        # f28_has_qala supprimé
+        'f29_qala_density', 'f30_has_first_person',
         'f31_first_person_density', 'f32_junun_near_qala', 'f33_has_questions',
         'f34_question_density', 'f35_question_answer', 'f36_dialogue_structure',
         'f37_qala_position', 'f38_qala_in_final',
@@ -138,7 +144,11 @@ def train_xgboost(X, y, cv_folds=5):
         'f62_has_wasf', 'f63_wasf_density', 'f64_wasf_in_title',
         'f65_root_jnn_density', 'f66_root_aql_density', 'f67_root_hikma_density',
         'f68_verb_density', 'f69_noun_density', 'f70_adj_density',
-        'f71_perf_density', 'f72_imperf_density', 'f73_passive_voice_ratio',
+        # f71-f73 supprimés
+        'f74_question_mark_presence', 'f75_question_mark_density',
+        'f76_religious_intensity', 'f77_first_person_scene',
+        'f78_direct_address', 'f79_physical_reaction',
+        'f80_fool_location', 'f81_mystical_verb', 'f82_love_madness',
     ]
 
     # Rapport
@@ -151,11 +161,14 @@ def train_xgboost(X, y, cv_folds=5):
         'n_positives': int(sum(y == 1)),
         'n_negatives': int(sum(y == 0)),
         'hyperparameters': {
-            'max_depth': 5,
-            'learning_rate': 0.1,
-            'n_estimators': 100,
-            'subsample': 0.8,
-            'colsample_bytree': 0.8,
+            'max_depth': 3,
+            'learning_rate': 0.05,
+            'n_estimators': 200,
+            'subsample': 0.7,
+            'colsample_bytree': 0.7,
+            'reg_alpha': 0.1,
+            'reg_lambda': 1.0,
+            'min_child_weight': 5,
             'scale_pos_weight': float(sum(y == 0) / sum(y == 1))
         },
         'feature_importance': dict(zip(
@@ -168,7 +181,7 @@ def train_xgboost(X, y, cv_folds=5):
     return clf, scaler, xgb_report
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Train XGBoost classifier with 71 features')
+    parser = argparse.ArgumentParser(description='Train XGBoost classifier with 79 features (v79)')
     parser.add_argument('--cv', type=int, default=5, help='CV folds')
     args = parser.parse_args()
 
@@ -179,7 +192,7 @@ if __name__ == '__main__':
     print(f"Loading data…")
     X, y = load_dataset(DATASET)
 
-    print(f"\nTraining XGBoost (71 features)…")
+    print(f"\nTraining XGBoost (79 features v79, régularisation renforcée)…")
     clf, scaler, report = train_xgboost(X, y, cv_folds=args.cv)
 
     # Save
