@@ -1,0 +1,90 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                            V80 QUICK START                                 ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+✅ CAMeL Tools verified and working
+
+To train v80 classifier, use THIS EXACT COMMAND:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+C:\Users\augus\.conda\envs\uqala\python.exe pipelines\level1_interpretable\p1_4_logistic_regression_v80.py --cv 5
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHY THIS COMMAND:
+  • Uses the CORRECT Python environment (conda venv)
+  • CAMeL Tools is installed there
+  • Morphological features will be extracted (not 0.0)
+
+EXPECTED OUTPUT:
+  ✅ CAMeL Tools loaded
+
+  CV AUC: 0.8293 ± 0.0929
+  Test AUC: 0.8403
+
+  Top features:
+    f02_famous_fool = +0.5844
+    E3_dialogue_first_person_density = +0.3781
+    f65_root_jnn_density = +0.XXXX (morphology, should be non-zero)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VERIFY CAMEL WORKS (optional):
+
+C:\Users\augus\.conda\envs\uqala\python.exe test_morpho_features.py
+
+Expected: ✅ CAMeL Tools is fully functional
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CHOOSE YOUR CONTEXT:
+
+For Command Prompt (CMD):
+  C:\Users\augus\.conda\envs\uqala\python.exe pipelines\level1_interpretable\p1_4_logistic_regression_v80.py --cv 5
+
+For PowerShell:
+  & "C:\Users\augus\.conda\envs\uqala\python.exe" pipelines\level1_interpretable\p1_4_logistic_regression_v80.py --cv 5
+
+For Bash/Git Bash:
+  /c/Users/augus/.conda/envs/uqala/python.exe pipelines/level1_interpretable/p1_4_logistic_regression_v80.py --cv 5
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT IS V80:
+
+Features: 27 (15 junun + 6 morphology + 6 empirical)
+
+Junun core (f00-f14):
+  • Famous fool names (بهلول, سعدون)
+  • Junun density and position
+  • Context and validation
+
+Morphology (f65-f70) - via CAMeL Tools:
+  • ج.ن.ن root density
+  • ع.ق.ل root density
+  • ح.ك.م root density
+  • Verb, noun, adjective densities
+
+Empirical (E1-E6) - corpus analysis:
+  • E1: Scene intro verbs
+  • E2: Witness verb density
+  • E3: First-person dialogue (قلت)
+  • E4: Direct address (يا بهلول)
+  • E5: Divine invocation (إلهي)
+  • E6: Sacred/liminal spaces
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NEXT STEPS:
+
+1. Run the command above
+2. Check that f65_root_jnn_density and other morpho are non-zero
+3. Validate on external corpus (Ibn Abd Rabbih)
+4. Enrich empirical features if needed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For more details, see: HOW_TO_USE_V80.md

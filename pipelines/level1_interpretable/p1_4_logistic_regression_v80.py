@@ -32,6 +32,7 @@ import pathlib
 import argparse
 import pickle
 import re
+import importlib.util
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
@@ -40,17 +41,31 @@ from sklearn.metrics import roc_auc_score
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-# CAMeL Tools pour morphologie arabe
-try:
-    from camel_tools.morphology.database import MorphologyDB
-    from camel_tools.morphology.analyzer import Analyzer
-    print("✅ CAMeL Tools loaded\n")
-    morpho_db = MorphologyDB.builtin_db()
-    analyzer = Analyzer(morpho_db)
-    HAS_CAMEL = True
-except ImportError as e:
-    print(f"⚠️  CAMeL Tools not available: {e}")
+# Smart CAMeL Tools loader (works in multiple environments)
+BASE = pathlib.Path(__file__).resolve().parent.parent.parent
+smart_loader_path = BASE / "smart_camel_loader.py"
+
+if smart_loader_path.exists():
+    # Use smart loader (handles both conda venv and Windows Store Python)
+    spec = importlib.util.spec_from_file_location("smart_camel_loader", smart_loader_path)
+    smart_loader = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(smart_loader)
+    HAS_CAMEL = smart_loader.HAS_CAMEL
+    analyzer = smart_loader.analyzer
+    extract_morpho_safe = smart_loader.extract_morpho_features_safe
+else:
+    # Fallback: direct import (should work in conda venv)
     HAS_CAMEL = False
+    analyzer = None
+    try:
+        from camel_tools.morphology.database import MorphologyDB
+        from camel_tools.morphology.analyzer import Analyzer
+        morpho_db = MorphologyDB.builtin_db()
+        analyzer = Analyzer(morpho_db)
+        HAS_CAMEL = True
+        print("✅ CAMeL Tools loaded\n")
+    except ImportError:
+        print(f"⚠️  CAMeL Tools not available (using degraded mode)")
 
 BASE         = pathlib.Path(__file__).resolve().parent.parent.parent  # repo root
 DATASET      = BASE / "data" / "raw" / "dataset_raw.json"
