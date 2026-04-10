@@ -9,7 +9,7 @@
 
 **Objectif** : Identifier automatiquement les récits de « fou sage » (majnun aqil) dans la littérature arabe classique, à partir du corpus de Nisaburi (*Kitāb ʿUqalāʾ al-Maǧānīn*).
 
-**Chercheur** : Auguste (gsspt)
+**Chercheur** : Augustin (gsspt)
 **Dépôt** : `https://github.com/gsspt/Uqala_NLP`
 **Branche active** : `claude/repo-structure-review-07E9d`
 
