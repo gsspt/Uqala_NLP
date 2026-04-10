@@ -3,9 +3,6 @@
 A machine learning system for identifying and analyzing the *ʿāqil majnūn* (wise fool / sage fool) figure in classical Arabic literature, particularly in the OpenITI corpus.
 
 **Author:** Augustin Pot  
-**Affiliation:** IREMAM (Institut de Recherche et d'Études sur le Monde Arabe et Musulman), Aix-Marseille University  
-**Supervisor:** Hakan Özkan
-
 ---
 
 ## 📚 Project Overview
