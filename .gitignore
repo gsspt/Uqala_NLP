@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+camel_env/
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Large Files (optional - upload separately)
+*.csv
+*.pkl
+*.pickle
+camelbert_majnun/
+camel_tools/
+openiti_corpus/
+
+# Temporary/Cache
+.cache/
+*.cache
+*.tmp
+
+# Data files (intermediate results)
+features_*.csv
+*_test.csv
+*_train.csv
+*.model
+*.bin
+
+# Results (keep only summaries, not raw predictions)
+results/**/*.json
+!results/**/strict_analysis.json
+!results/**/llm_analysis.json
+!results/**/post_filtered_results.json
+
+# Logs
+*.log
+
+# Environment files
+.env.local
+.env.*.local
+
+# Dataset backups
+dataset_*.backup.json
+scan/openiti_lr_candidates.json

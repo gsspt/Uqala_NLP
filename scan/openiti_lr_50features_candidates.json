@@ -1,0 +1,39 @@
+{
+  "threshold": 0.75,
+  "total_akhbars": 22616747,
+  "n_candidates": 4,
+  "candidates": [
+    {
+      "file": "0211CabdRazzaqSancani.Musannaf.Shia001887Vols-ara1",
+      "author": "0211CabdRazzaqSancani",
+      "work": "0211CabdRazzaqSancani.Musannaf",
+      "idx_in_file": 7541,
+      "lr_score": 0.9596065838715867,
+      "text": "قلت: فاستخلف، قال: من؟ قلت: عثمان، قال: أخشى عقده (1) وأثرته، قال: قلت: عبد الرحمن بن عوف، قال: مؤمن ضعيف، قال: قلت: فالزبير، قال: ضرس (2)، قال: قلت:"
+    },
+    {
+      "file": "1411SayyidMarcashi.SharhIhqaq.Shia004092Vols-ara1",
+      "author": "1411SayyidMarcashi",
+      "work": "1411SayyidMarcashi.SharhIhqaq",
+      "idx_in_file": 25759,
+      "lr_score": 0.8367208787734418,
+      "text": "قال: قلت فاستخلف. قال: من؟ قلت: عمر. قال: فسكت ثم مضى ساعة ثم تنفس، قال: قلت ما شأنك؟ قال: نعيت إلي نفسي يا ابن مسعود. قال:"
+    },
+    {
+      "file": "1450Milani.NafahatAzhar.Shia004456Vols-ara1",
+      "author": "1450Milani",
+      "work": "1450Milani.NafahatAzhar",
+      "idx_in_file": 10979,
+      "lr_score": 0.7596433099419408,
+      "text": "قلت: فاستخلف. قال: من؟ قلت: أبا بكر، قال: فسكت ساعة ثم تنفس فقلت: ما شأنك يا رسول الله، قال: نعيت إلي نفسي. قلت: استخلف قال:"
+    },
+    {
+      "file": "0283AbuIshaqThaqafi.Gharat.Shia001270Vols-ara1",
+      "author": "0283AbuIshaqThaqafi",
+      "work": "0283AbuIshaqThaqafi.Gharat",
+      "idx_in_file": 608,
+      "lr_score": 0.7547280011963609,
+      "text": "قال الرياح، ويلك، قال: فما الحاملات وقرا؟ - قال: السحاب، ويلك، قال فما الجاريات يسرا؟ - قال: السفن، ويلك، قال: فما المقسمات أمرا؟ - قال:"
+    }
+  ]
+}

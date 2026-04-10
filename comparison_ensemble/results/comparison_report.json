@@ -1,0 +1,137 @@
+{
+  "timestamp": "2026-04-10",
+  "models": {
+    "lr": {
+      "algorithm": "Logistic Regression",
+      "cv_auc_mean": 0.8378848059995232,
+      "cv_auc_std": 0.07347305284527732,
+      "test_auc": 0.837013430457546,
+      "n_features": 74
+    },
+    "xgb": {
+      "algorithm": "XGBoost",
+      "cv_auc_mean": 0.8459301304329901,
+      "cv_auc_std": 0.0620579962786761,
+      "test_auc": 0.9911791486455725,
+      "n_features": 74
+    }
+  },
+  "winner": {
+    "cv_auc": "XGBoost",
+    "test_auc": "XGBoost"
+  },
+  "improvements": {
+    "cv_auc_gain": 0.00804532443346695,
+    "cv_auc_gain_pct": 0.9601945727932826,
+    "test_auc_gain": 0.1541657181880266,
+    "test_auc_gain_pct": 18.418547729127035
+  },
+  "top_features": {
+    "lr_top_10": [
+      {
+        "name": "f02_famous_fool",
+        "coefficient": 0.6632647585530637
+      },
+      {
+        "name": "f68_verb_density",
+        "coefficient": 0.42050247015930514
+      },
+      {
+        "name": "f29_qala_density",
+        "coefficient": 0.3307786606233924
+      },
+      {
+        "name": "f51_contrast_revelation",
+        "coefficient": 0.2789617523437033
+      },
+      {
+        "name": "f37_qala_position",
+        "coefficient": 0.2725162501661288
+      },
+      {
+        "name": "f52_has_authority",
+        "coefficient": -0.26601046599806677
+      },
+      {
+        "name": "f04_junun_specialized",
+        "coefficient": 0.2583647804266428
+      },
+      {
+        "name": "f53_authority_count",
+        "coefficient": -0.2420500904183836
+      },
+      {
+        "name": "f56_has_shir",
+        "coefficient": 0.21562204227333587
+      },
+      {
+        "name": "f20_junun_aql_ratio",
+        "coefficient": 0.21149702289625844
+      }
+    ],
+    "xgb_top_10": [
+      {
+        "name": "f04_junun_specialized",
+        "importance": 0.22242075204849243
+      },
+      {
+        "name": "f20_junun_aql_ratio",
+        "importance": 0.15103940665721893
+      },
+      {
+        "name": "f02_famous_fool",
+        "importance": 0.0651175007224083
+      },
+      {
+        "name": "f01_junun_density",
+        "importance": 0.03530110791325569
+      },
+      {
+        "name": "f53_authority_count",
+        "importance": 0.025894444435834885
+      },
+      {
+        "name": "f52_has_authority",
+        "importance": 0.02519017457962036
+      },
+      {
+        "name": "f51_contrast_revelation",
+        "importance": 0.023328479379415512
+      },
+      {
+        "name": "f17_aql_count",
+        "importance": 0.018038082867860794
+      },
+      {
+        "name": "f24_hikma_density",
+        "importance": 0.01586027815937996
+      },
+      {
+        "name": "f57_shir_density",
+        "importance": 0.015262887813150883
+      }
+    ]
+  },
+  "consensus": {
+    "common_top_features": [
+      "f51_contrast_revelation",
+      "f53_authority_count",
+      "f04_junun_specialized",
+      "f52_has_authority",
+      "f20_junun_aql_ratio",
+      "f02_famous_fool"
+    ],
+    "lr_unique_top": [
+      "f29_qala_density",
+      "f56_has_shir",
+      "f37_qala_position",
+      "f68_verb_density"
+    ],
+    "xgb_unique_top": [
+      "f57_shir_density",
+      "f24_hikma_density",
+      "f01_junun_density",
+      "f17_aql_count"
+    ]
+  }
+}
