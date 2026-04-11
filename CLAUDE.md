@@ -36,7 +36,71 @@ git remote get-url origin
 
 ---
 
-## État actuel du projet (mise à jour : 2026-04-10)
+## 🔄 Workflow OpenITI → Pipeline modèles
+
+**IMPORTANT**: Tout texte extrait du corpus OpenITI DOIT passer par ce workflow:
+
+### 1️⃣ Extraction des akhbars (unités narratives)
+```bash
+from src.uqala_nlp.preprocessing.akhbar_extraction import extract_akhbars_from_file
+
+# Pour UN fichier OpenITI:
+akhbars = extract_akhbars_from_file('openiti_corpus/data/0328IbnCabdRabbih/.../file.txt')
+# Retourne: list[str] — chaque str est un khabar cohérent, 80-3000 caractères arabes
+
+# Pour TOUT le corpus:
+from src.uqala_nlp.preprocessing.akhbar_extraction import extract_akhbars_from_corpus
+akhbars, total = extract_akhbars_from_corpus('openiti_corpus/data/')
+```
+
+**Format OpenITI**:
+- Métadonnées : lignes `#META# ...`
+- Contenu marqué par : `#META#Header#End#`
+- Paragraphes : lignes commençant par `~~`
+- Sections/akhbars séparés par : lignes commençant par `# ` (pas `# |`)
+- Titres : `# |` (ignorés)
+
+**Filtre qualité**:
+- Min: 80 caractères arabes (élimine fragments, métadonnées)
+- Max: 3000 caractères arabes (évite textes énormes)
+
+### 2️⃣ Filtrage des isnads
+```bash
+from src.uqala_nlp.preprocessing.isnad_filter import remove_isnad
+
+# Chaque akhbar DOIT être purifié:
+akhbar_clean = remove_isnad(akhbar)
+```
+
+**Pourquoi** : Les isnads (chaînes d'autorité) apparaissent dans TOUS les types de textes (positifs ET négatifs), donc ce ne sont pas un signal pertinent. La fonction `isnad_filter.py` les supprime avant extraction de features.
+
+### 3️⃣ Passage au pipeline modèles
+```bash
+# Exemple : Score un akhbar avec v80
+from pipelines.level1_interpretable.p1_4_logistic_regression_v80 import extract_all_features_27
+import pickle
+
+akhbar = remove_isnad(akhbar)  # ← TOUJOURS filtrer les isnads d'abord!
+features = extract_all_features_27(akhbar)
+# Utiliser les features pour scoring
+```
+
+**Résumé du workflow**:
+```
+OpenITI file
+    ↓ extract_akhbars_from_file()
+Akhbars (liste)
+    ↓ remove_isnad() [pour chaque akhbar]
+Akhbars nettoyés
+    ↓ extract_all_features_27() [pour v80]
+Features vectors
+    ↓ predict()
+Scores (0.0-1.0)
+```
+
+---
+
+## État actuel du projet (mise à jour : 2026-04-11)
 
 ### Données
 | Fichier | Contenu |
