@@ -1,0 +1,124 @@
+{
+  "model": "XGBoost v80",
+  "features_count": 27,
+  "feature_names": [
+    "f00_has_junun",
+    "f01_junun_density",
+    "f02_famous_fool",
+    "f03_junun_count",
+    "f04_junun_specialized",
+    "f05_junun_position",
+    "f06_junun_in_title",
+    "f07_junun_plural",
+    "f08_junun_in_final_third",
+    "f09_jinn_root",
+    "f10_junun_repetition",
+    "f11_junun_morpho",
+    "f12_junun_positive",
+    "f13_junun_good_context",
+    "f14_junun_validation_prox",
+    "f65_root_jnn_density",
+    "f66_root_aql_density",
+    "f67_root_hikma_density",
+    "f68_verb_density",
+    "f69_noun_density",
+    "f70_adj_density",
+    "E1_scene_intro_presence",
+    "E2_witness_verb_density",
+    "E3_dialogue_first_person_density",
+    "E4_direct_address_presence",
+    "E5_divine_personal_intensity",
+    "E6_sacred_spaces_presence"
+  ],
+  "cv_folds": 5,
+  "cv_auc_scores": [
+    0.8811248008194854,
+    0.8517314477577964,
+    0.9036982164225881,
+    0.8509530457575929,
+    0.899794860105989
+  ],
+  "cv_auc_mean": 0.8774604741726904,
+  "cv_auc_std": 0.02265081793050235,
+  "hyperparameters": {
+    "max_depth": 3,
+    "learning_rate": 0.1,
+    "n_estimators": 200,
+    "reg_alpha": 0.1,
+    "reg_lambda": 1.0,
+    "min_child_weight": 5,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8
+  },
+  "shap_feature_importance": {
+    "f00_has_junun": 2.472498893737793,
+    "f01_junun_density": 22.25864028930664,
+    "f02_famous_fool": 25.10417938232422,
+    "f03_junun_count": 29.71941375732422,
+    "f04_junun_specialized": 108.95260620117188,
+    "f05_junun_position": 6.57678747177124,
+    "f06_junun_in_title": 6.360230445861816,
+    "f07_junun_plural": 0.0,
+    "f08_junun_in_final_third": 2.4723317623138428,
+    "f09_jinn_root": 0.0,
+    "f10_junun_repetition": 5.30466365814209,
+    "f11_junun_morpho": 3.8297221660614014,
+    "f12_junun_positive": 0.0,
+    "f13_junun_good_context": 2.0901522636413574,
+    "f14_junun_validation_prox": 0.0,
+    "f65_root_jnn_density": 2.4486281871795654,
+    "f66_root_aql_density": 2.909853458404541,
+    "f67_root_hikma_density": 0.0,
+    "f68_verb_density": 3.427351474761963,
+    "f69_noun_density": 3.004683017730713,
+    "f70_adj_density": 2.489532947540283,
+    "E1_scene_intro_presence": 4.863498210906982,
+    "E2_witness_verb_density": 4.905148506164551,
+    "E3_dialogue_first_person_density": 6.425620079040527,
+    "E4_direct_address_presence": 8.018768310546875,
+    "E5_divine_personal_intensity": 3.113420009613037,
+    "E6_sacred_spaces_presence": 6.070316791534424
+  },
+  "top_10_features": [
+    {
+      "name": "f04_junun_specialized",
+      "importance": 108.95260620117188
+    },
+    {
+      "name": "f03_junun_count",
+      "importance": 29.71941375732422
+    },
+    {
+      "name": "f02_famous_fool",
+      "importance": 25.10417938232422
+    },
+    {
+      "name": "f01_junun_density",
+      "importance": 22.25864028930664
+    },
+    {
+      "name": "E4_direct_address_presence",
+      "importance": 8.018768310546875
+    },
+    {
+      "name": "f05_junun_position",
+      "importance": 6.57678747177124
+    },
+    {
+      "name": "E3_dialogue_first_person_density",
+      "importance": 6.425620079040527
+    },
+    {
+      "name": "f06_junun_in_title",
+      "importance": 6.360230445861816
+    },
+    {
+      "name": "E6_sacred_spaces_presence",
+      "importance": 6.070316791534424
+    },
+    {
+      "name": "f10_junun_repetition",
+      "importance": 5.30466365814209
+    }
+  ]
+}
