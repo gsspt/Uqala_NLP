@@ -166,6 +166,7 @@ def process_akhbar(akh):
             'idx': akh['idx'],
             'filename': akh['filename'],
             'khabar_num': akh['khabar_num'],
+            'text': akh['text'],
             'classification': None,
             'error': True,
         }
@@ -177,6 +178,7 @@ def process_akhbar(akh):
         'idx': akh['idx'],
         'filename': akh['filename'],
         'khabar_num': akh['khabar_num'],
+        'text': akh['text'],
         'classification': is_true,
         'reason': reason,
         'error': False,
@@ -276,6 +278,12 @@ def classify_full_corpus():
         estimated = int(10286 * precision)
         print(f"Estimé majnun aqil réels dans Ibn Abd Rabbih: ~{estimated}")
 
+    # Collect positives with full text + reason for analysis
+    positives_detail = sorted(
+        [c for c in classifications.values() if c.get('classification') and not c.get('error')],
+        key=lambda x: x['idx']
+    )
+
     # Save final results
     output_file = RESULTS_DIR / "deepseek_full_corpus_8workers.json"
     with open(output_file, 'w', encoding='utf-8') as f:
@@ -292,9 +300,20 @@ def classify_full_corpus():
             'rate_limit_sec': 0.1,
             'cost_usd': 1.50,
             'time_minutes_estimated': 20,
+            'positives': [
+                {
+                    'idx': c['idx'],
+                    'filename': c['filename'],
+                    'khabar_num': c['khabar_num'],
+                    'text': c['text'],
+                    'reason': c.get('reason', 'N/A'),
+                }
+                for c in positives_detail
+            ],
         }, f, ensure_ascii=False, indent=2)
 
     print(f"\n[4] Résultats sauvegardés: {output_file.name}")
+    print(f"    {true_count} positifs avec texte intégral + raison DeepSeek")
 
     # Clean up checkpoint
     if checkpoint_file.exists():
