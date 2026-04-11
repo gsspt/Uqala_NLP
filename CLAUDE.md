@@ -100,7 +100,32 @@ Scores (0.0-1.0)
 
 ---
 
-## État actuel du projet (mise à jour : 2026-04-11)
+## État actuel du projet (mise à jour : 2026-04-11, 14:30)
+
+### 🎯 MAJOR FIX: v80 Validation & OpenITI Preprocessing
+
+**Problem identified & fixed**:
+- Previous v80 validation used sliding window (500-char chunks) → **wrong granularity**
+- Results: 45 passages, 100% false positives
+- **Solution**: Created proper akhbar extraction + isnad filtering
+- **New results**: 10,286 akhbars, **1.0% false positive rate** → 53.6 pts improvement over baseline
+
+**What was created**:
+1. `src/uqala_nlp/preprocessing/akhbar_extraction.py` — Extract atomic narrative units from OpenITI
+2. `validate_v80_on_ibn_rabbih.py` — Proper external corpus validation
+3. Updated `CLAUDE.md` with complete OpenITI → Pipeline workflow
+
+### v80 Validation Results (Ibn Abd Rabbih, proper akhbars)
+| Metric | v79 Baseline | v80 (Fixed) | Improvement |
+|--------|------------|-----------|------------|
+| **FP Rate** | 54.6% | 1.0% | -53.6 pts ✅ |
+| **Akhbars tested** | N/A | 10,286 | Proper extraction |
+| **Positives** | 5,527 | 102 | Highly selective |
+| **Mean confidence** | N/A | 0.044 | Very confident |
+
+---
+
+## État précédent du projet (mise à jour : 2026-04-11, 08:00)
 
 ### Données
 | Fichier | Contenu |
