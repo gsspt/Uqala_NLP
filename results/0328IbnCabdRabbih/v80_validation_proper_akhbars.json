@@ -1,0 +1,82 @@
+{
+  "model": "v80",
+  "corpus": "Ibn Abd Rabbih (proper akhbar extraction)",
+  "total_akhbars_in_corpus": 10286,
+  "total_predictions": 10286,
+  "positives": 102,
+  "negatives": 10184,
+  "positive_rate": 0.00991639121135524,
+  "mean_confidence": 0.043939574763433124,
+  "predictions_sample": [
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 911,
+      "pred_proba": 0.9734268532917694,
+      "pred_label": 1,
+      "text_length": 40
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5033,
+      "pred_proba": 0.961116566825044,
+      "pred_label": 1,
+      "text_length": 55
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1733,
+      "pred_proba": 0.9589136655528493,
+      "pred_label": 1,
+      "text_length": 116
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 4908,
+      "pred_proba": 0.9444705124888148,
+      "pred_label": 1,
+      "text_length": 108
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1977,
+      "pred_proba": 0.9380994238320731,
+      "pred_label": 1,
+      "text_length": 269
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2652,
+      "pred_proba": 0.9209270871960187,
+      "pred_label": 1,
+      "text_length": 56
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 3287,
+      "pred_proba": 0.892928341982978,
+      "pred_label": 1,
+      "text_length": 84
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2868,
+      "pred_proba": 0.879945445434824,
+      "pred_label": 1,
+      "text_length": 88
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5967,
+      "pred_proba": 0.8789130349496119,
+      "pred_label": 1,
+      "text_length": 67
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1724,
+      "pred_proba": 0.7988838507707006,
+      "pred_label": 1,
+      "text_length": 160
+    }
+  ]
+}

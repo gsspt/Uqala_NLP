@@ -56,11 +56,6 @@ models/active_learning/
 # CSV and intermediate data files
 *.csv
 
-# Results (volumineux — garder seulement les analyses finales)
-results/**/*.json
-!results/**/strict_analysis.json
-!results/**/llm_analysis.json
-!results/**/post_filtered_results.json
 
 # Active learning checkpoints (intermédiaires)
 results/active_learning/cycle_*.pkl

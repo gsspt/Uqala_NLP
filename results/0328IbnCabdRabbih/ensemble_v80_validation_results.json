@@ -1,0 +1,133 @@
+{
+  "model": "Ensemble v80 (LR + XGBoost)",
+  "corpus": "Ibn Abd Rabbih (proper akhbar extraction)",
+  "total_akhbars_in_corpus": 10286,
+  "total_predictions": 10286,
+  "positives": 15,
+  "negatives": 10271,
+  "positive_rate": 0.0014582928251993,
+  "mean_ensemble_confidence": 0.0373386485572191,
+  "mean_agreement": 0.9790563210171344,
+  "agreement_distribution": {
+    "very_high": 9593,
+    "high": 519,
+    "medium": 139,
+    "low": 35
+  },
+  "file_statistics": [
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "akhbars": 3114,
+      "predictions": 3114,
+      "positives": 5
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "akhbars": 7172,
+      "predictions": 7172,
+      "positives": 10
+    }
+  ],
+  "predictions_sample": [
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5967,
+      "pred_ensemble": 0.8303021142651197,
+      "pred_lr": 0.8789130349496119,
+      "pred_xgb": 0.7816911935806274,
+      "agreement": 0.9027781586310155,
+      "text_length": 67,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2652,
+      "pred_ensemble": 0.8108432490270865,
+      "pred_lr": 0.9209270871960187,
+      "pred_xgb": 0.7007594108581543,
+      "agreement": 0.7798323236621356,
+      "text_length": 56,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1724,
+      "pred_ensemble": 0.7371411002663317,
+      "pred_lr": 0.7988838507707006,
+      "pred_xgb": 0.6753983497619629,
+      "agreement": 0.8765144989912623,
+      "text_length": 160,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1977,
+      "pred_ensemble": 0.7270037133427334,
+      "pred_lr": 0.9380994238320731,
+      "pred_xgb": 0.5159080028533936,
+      "agreement": 0.5778085790213204,
+      "text_length": 269,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 4908,
+      "pred_ensemble": 0.649632209350334,
+      "pred_lr": 0.9444705124888148,
+      "pred_xgb": 0.354793906211853,
+      "agreement": 0.4103233937230383,
+      "text_length": 108,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1733,
+      "pred_ensemble": 0.6089746413329813,
+      "pred_lr": 0.9589136655528493,
+      "pred_xgb": 0.2590356171131134,
+      "agreement": 0.3001219515602641,
+      "text_length": 116,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5187,
+      "pred_ensemble": 0.5935813968597541,
+      "pred_lr": 0.7535977433559675,
+      "pred_xgb": 0.43356505036354065,
+      "agreement": 0.6799673070075731,
+      "text_length": 214,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5033,
+      "pred_ensemble": 0.5677197349906622,
+      "pred_lr": 0.961116566825044,
+      "pred_xgb": 0.17432290315628052,
+      "agreement": 0.21320633633123653,
+      "text_length": 55,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5352,
+      "pred_ensemble": 0.5671554320575072,
+      "pred_lr": 0.7476966606619503,
+      "pred_xgb": 0.38661420345306396,
+      "agreement": 0.6389175427911137,
+      "text_length": 210,
+      "label": 1
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 3287,
+      "pred_ensemble": 0.5599693556419101,
+      "pred_lr": 0.892928341982978,
+      "pred_xgb": 0.22701036930084229,
+      "agreement": 0.3340820273178643,
+      "text_length": 84,
+      "label": 1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "model": "DeepSeek Few-Shot (8 workers)",
+  "corpus": "Ibn Abd Rabbih (10,286 akhbars)",
+  "total_processed": 10286,
+  "errors": 0,
+  "true_positives": 74,
+  "false_positives": 10212,
+  "precision": 0.007194244604316547,
+  "few_shot_source": "Real Nisaburi majnun aqil narratives",
+  "workers": 8,
+  "rate_limit_sec": 0.1,
+  "cost_usd": 1.5,
+  "time_minutes_estimated": 20
+}
