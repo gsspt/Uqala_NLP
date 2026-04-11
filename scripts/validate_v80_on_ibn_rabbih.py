@@ -1,48 +1,43 @@
 #!/usr/bin/env python3
 """
-validate_v80_external_corpus.py
-──────────────────────────────────────────────────────────────────
-Validate v80 on external corpus (Ibn Abd Rabbih CiqdFarid).
-Compare false positive rate vs A1_conservative baseline.
+validate_v80_on_ibn_rabbih.py
+──────────────────────────────────────────────────────────────
+Proper validation of v80 on Ibn Abd Rabbih using:
+1. Correct akhbar extraction (not sliding window)
+2. Isnad filtering (required preprocessing)
+3. All 27 features with correct feature order
 
 Usage:
-  python validate_v80_external_corpus.py [--model v80|v79]
+  python validate_v80_on_ibn_rabbih.py
 """
 
 import json
 import sys
 import pathlib
 import pickle
-import re
-import argparse
 import importlib.util
 import numpy as np
-from sklearn.metrics import roc_auc_score
+from collections import Counter
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 # Setup paths
-BASE = pathlib.Path(__file__).resolve().parent
-OPENITI_ROOT = BASE / "openiti_corpus" / "data"
-IBN_RABBIH = OPENITI_ROOT / "0328IbnCabdRabbih" / "0328IbnCabdRabbih.CiqdFarid"
+BASE = pathlib.Path(__file__).resolve().parent.parent
 MODELS_DIR = BASE / "models"
 RESULTS_DIR = BASE / "results" / "0328IbnCabdRabbih"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
-# Smart CAMeL Tools loader
-smart_loader_path = BASE / "smart_camel_loader.py"
-if smart_loader_path.exists():
-    spec = importlib.util.spec_from_file_location("smart_camel_loader", smart_loader_path)
-    smart_loader = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(smart_loader)
-    HAS_CAMEL = smart_loader.HAS_CAMEL
-    extract_morpho_safe = smart_loader.extract_morpho_features_safe
-else:
-    HAS_CAMEL = False
-    extract_morpho_safe = None
+# Import modules
+sys.path.insert(0, str(BASE / "src"))
+from uqala_nlp.preprocessing.akhbar_extraction import extract_akhbars_from_file
+from uqala_nlp.preprocessing.isnad_filter import split_isnad
+from uqala_nlp.preprocessing.smart_camel_loader import HAS_CAMEL, extract_morpho_features_safe as extract_morpho_safe
 
 # ══════════════════════════════════════════════════════════════════════════════
-# FEATURE EXTRACTION (same as v80 pipeline)
+# FEATURE EXTRACTION (same as v80 pipeline, 27 features)
 # ══════════════════════════════════════════════════════════════════════════════
+
+import re
 
 JUNUN_TERMS = [
     'مجنون','المجنون','مجنونا','مجانين','المجانين','مجنونة','المجنونة',
@@ -52,10 +47,7 @@ JUNUN_TERMS = [
     'ذاهبالعقل','ذهبعقله','ذاهب','ذهب',
 ]
 
-FAMOUS_FOOLS = [
-    'بهلول','بهلولا','سعدون','عليان','جعيفران','ريحانة',
-    'سمنون','لقيط','حيون','حيونة','خلف','رياح',
-]
+FAMOUS_FOOLS = ['بهلول','بهلولا','سعدون','عليان','جعيفران','ريحانة','سمنون','لقيط','حيون','حيونة','خلف','رياح']
 
 SCENE_INTRO_VERBS = ['مررت','دخلت','فرأيت','لقيت','أتيت','سقطت','خرجت','وجدت']
 WITNESS_VERBS = ['رأيت','فرأيت','شاهدت','أبصرت','عاينت']
@@ -64,12 +56,14 @@ DIRECT_ADDRESS = ['يا بهلول','يا مجنون','يا ذا','يا هرم',
 DIVINE_PERSONAL = ['إلهي','اللهم','يا رب','يا إلهي']
 SACRED_SPACES = ['أزقة','المقابر','خرابات','الخرابات','قبر','سوق','مسجد']
 
+
 def has_junun_filtered(text):
     if not any(t in text for t in JUNUN_TERMS):
         return False
     if any(fp in text for fp in ['الجنة ', ' الجنة', 'الجن ', 'السجن ']):
         return False
     return True
+
 
 def extract_junun_features_15(text):
     features = {}
@@ -123,8 +117,8 @@ def extract_junun_features_15(text):
                     break
         return count
     features['f14_junun_validation_prox'] = float(count_proximity(text, JUNUN_TERMS, val_all, 100) > 0)
-
     return features
+
 
 def extract_empirical_features_6(text):
     features = {}
@@ -151,6 +145,7 @@ def extract_empirical_features_6(text):
 
     return features
 
+
 def extract_morphological_features_6(text):
     if extract_morpho_safe:
         return extract_morpho_safe(text)
@@ -164,70 +159,25 @@ def extract_morphological_features_6(text):
             'f70_adj_density': 0.0,
         }
 
+
 def extract_all_features_27(text):
-    """Extract all 27 v80 features"""
+    """Extract all 27 v80 features in INSERTION ORDER (dict.values())"""
     features = {}
     features.update(extract_junun_features_15(text))
     features.update(extract_morphological_features_6(text))
     features.update(extract_empirical_features_6(text))
     return features
 
+
 # ══════════════════════════════════════════════════════════════════════════════
-# LOAD AND PROCESS IBN RABBIH CORPUS
+# VALIDATION
 # ══════════════════════════════════════════════════════════════════════════════
 
-def load_ibn_rabbih_texts():
-    """Load all text files from Ibn Abd Rabbih CiqdFarid"""
-    texts = []
-
-    if not IBN_RABBIH.exists():
-        print(f"ERROR: Ibn Rabbih corpus not found at {IBN_RABBIH}")
-        return []
-
-    # Find all text files (not .yml, not README, not .md)
-    text_files = [f for f in IBN_RABBIH.glob('*')
-                  if f.is_file() and not f.suffix in ['.yml', '.md'] and not f.name.startswith('README')]
-
-    print(f"Found {len(text_files)} text files in Ibn Rabbih corpus")
-
-    for text_file in text_files:
-        try:
-            with open(text_file, 'r', encoding='utf-8') as f:
-                content = f.read().strip()
-                if content:
-                    texts.append({
-                        'filename': text_file.name,
-                        'text': content,
-                        'length': len(content)
-                    })
-        except Exception as e:
-            print(f"Warning: Could not read {text_file}: {e}")
-
-    print(f"Loaded {len(texts)} texts")
-    return texts
-
-def split_text_into_passages(text, window_size=500, step_size=250):
-    """Split long text into overlapping passages"""
-    passages = []
-    text_clean = text.replace('\n', ' ').strip()
-
-    for i in range(0, len(text_clean) - window_size, step_size):
-        passage = text_clean[i:i + window_size]
-        if len(passage.split()) > 10:  # Only keep passages with enough words
-            passages.append(passage)
-
-    # Add final passage
-    if len(text_clean) > window_size:
-        final = text_clean[-window_size:]
-        if len(final.split()) > 10 and final != passages[-1]:
-            passages.append(final)
-
-    return passages
-
-def validate_v80(model_path, verbose=False, sample_size=None):
-    """Load v80 model and make predictions on Ibn Rabbih corpus"""
+def validate_v80_on_ibn_rabbih():
+    """Validate v80 on all Ibn Abd Rabbih akhbars with proper preprocessing"""
 
     # Load model
+    model_path = MODELS_DIR / 'lr_classifier_v80.pkl'
     if not model_path.exists():
         print(f"ERROR: Model not found at {model_path}")
         return None
@@ -235,53 +185,59 @@ def validate_v80(model_path, verbose=False, sample_size=None):
     try:
         with open(model_path, 'rb') as f:
             model_data = pickle.load(f)
-
-        # Handle both dict format (with scaler) and direct model format
         if isinstance(model_data, dict) and 'clf' in model_data:
             clf = model_data['clf']
             scaler = model_data.get('scaler', None)
         else:
             clf = model_data
             scaler = None
-
-        print(f"✅ Loaded model from {model_path.name}")
+        print(f"[OK] Loaded model from {model_path.name}")
     except Exception as e:
         print(f"ERROR loading model: {e}")
         return None
 
-    # Load texts
-    texts = load_ibn_rabbih_texts()
-    if not texts:
+    print(f"     CAMeL Tools: {'Available' if HAS_CAMEL else 'Not available (degraded)'}\n")
+
+    # Find all Ibn Abd Rabbih files
+    corpus_root = BASE / "openiti_corpus" / "data" / "0328IbnCabdRabbih"
+    if not corpus_root.exists():
+        print(f"ERROR: Corpus path not found: {corpus_root}")
         return None
 
-    # Process each text into passages and extract features
+    text_files = sorted(corpus_root.rglob("*-ara1"))
+    print(f"[OK] Found {len(text_files)} OpenITI files\n")
+    print("Extracting akhbars and making predictions...")
+
     all_predictions = []
-    all_texts = []
+    total_akhbars = 0
+    processed_files = 0
 
-    print("\nExtracting features from passages...")
-    for idx, text_info in enumerate(texts):
-        print(f"  Processing {idx+1}/{len(texts)}: {text_info['filename']}")
-        passages = split_text_into_passages(text_info['text'])
+    for file_idx, filepath in enumerate(text_files, 1):
+        # Extract akhbars from file
+        akhbars = extract_akhbars_from_file(str(filepath))
+        if not akhbars:
+            print(f"  [{file_idx}/{len(text_files)}] {filepath.name}: 0 akhbars")
+            continue
 
-        # Limit to sample size if specified
-        if sample_size:
-            passages = passages[:sample_size]
+        processed_files += 1
+        total_akhbars += len(akhbars)
 
-        for passage in passages:
+        # Score each akhbar
+        for khabar_num, akhbar_raw in enumerate(akhbars):
+            # CRITICAL: Clean isnad first (split_isnad returns (text_without_isnad, isnad_part))
+            akhbar, _ = split_isnad(akhbar_raw)
+
             try:
-                features = extract_all_features_27(passage)
+                features = extract_all_features_27(akhbar)
 
-                # Check if we have all 27 features
+                # Check we have all 27 features
                 if len(features) != 27:
-                    if verbose:
-                        print(f"  Warning: got {len(features)} features instead of 27")
                     continue
 
-                # IMPORTANT: use insertion order (dict.values()), NOT sorted() —
-                # the model was trained with list(feat.values()) preserving insertion order
+                # IMPORTANT: use insertion order (dict.values()), NOT sorted()
                 feature_vector = np.array(list(features.values())).reshape(1, -1)
 
-                # Scale if scaler is available
+                # Scale if available
                 if scaler:
                     feature_vector = scaler.transform(feature_vector)
 
@@ -290,121 +246,91 @@ def validate_v80(model_path, verbose=False, sample_size=None):
                 pred_label = clf.predict(feature_vector)[0]
 
                 all_predictions.append({
-                    'filename': text_info['filename'],
-                    'passage': passage[:100] + '...' if len(passage) > 100 else passage,
+                    'filename': filepath.name,
+                    'khabar_num': khabar_num,
                     'pred_proba': float(pred_proba),
                     'pred_label': int(pred_label),
-                    'text_length': len(passage)
+                    'text_length': len(akhbar),
                 })
-                all_texts.append(passage)
             except Exception as e:
-                print(f"  Error in passage processing: {e}", file=sys.stderr)
-                if verbose:
-                    import traceback
-                    traceback.print_exc()
                 continue
 
-    return all_predictions
+        print(f"  [{file_idx}/{len(text_files)}] {filepath.name}: {len(akhbars)} akhbars")
 
-# ══════════════════════════════════════════════════════════════════════════════
-# MAIN
-# ══════════════════════════════════════════════════════════════════════════════
-
-def main():
-    parser = argparse.ArgumentParser(description='Validate v80 on Ibn Abd Rabbih corpus')
-    parser.add_argument('--model', choices=['v80', 'v79'], default='v80',
-                        help='Model to test (default: v80)')
-    parser.add_argument('--verbose', action='store_true', help='Verbose output')
-    parser.add_argument('--sample', type=int, default=None,
-                        help='Limit passages to N per text file (default: all)')
-    args = parser.parse_args()
-
-    # Select model
-    if args.model == 'v80':
-        model_path = MODELS_DIR / 'lr_classifier_v80.pkl'
-    else:
-        model_path = MODELS_DIR / 'lr_classifier_79features.pkl'
-
-    print(f"Testing {args.model} on Ibn Abd Rabbih external corpus")
-    print(f"Model: {model_path}")
-    print(f"CAMeL Tools: {'✅ Available' if HAS_CAMEL else '⚠️  Not available (degraded mode)'}")
-    if args.sample:
-        print(f"Sample mode: {args.sample} passages per text\n")
-    else:
-        print("")
-
-    # Validate
-    predictions = validate_v80(model_path, verbose=args.verbose, sample_size=args.sample)
-
-    if not predictions:
-        print("ERROR: Could not generate predictions (no passages processed)")
-        return 1
-
-    if len(predictions) == 0:
-        print("ERROR: No predictions generated")
-        return 1
+    if not all_predictions:
+        print("\nERROR: No predictions generated")
+        return None
 
     # Analysis
     print(f"\n{'='*80}")
-    print(f"RESULTS FOR {args.model.upper()}")
+    print(f"VALIDATION RESULTS: v80 ON IBN ABD RABBIH")
     print(f"{'='*80}\n")
 
-    total = len(predictions)
-    positives = sum(1 for p in predictions if p['pred_label'] == 1)
+    total = len(all_predictions)
+    positives = sum(1 for p in all_predictions if p['pred_label'] == 1)
     negatives = total - positives
 
-    print(f"Total predictions: {total}")
-    print(f"Positive predictions: {positives} ({100*positives/total:.1f}%)")
-    print(f"Negative predictions: {negatives} ({100*negatives/total:.1f}%)")
+    print(f"Total akhbars processed: {total_akhbars}")
+    print(f"Predictions made: {total}")
+    print(f"  Positive: {positives} ({100*positives/total:.1f}%)")
+    print(f"  Negative: {negatives} ({100*negatives/total:.1f}%)")
 
-    # Probabilities
-    probs = [p['pred_proba'] for p in predictions]
+    probs = [p['pred_proba'] for p in all_predictions]
     print(f"\nPrediction confidence:")
     print(f"  Mean: {np.mean(probs):.3f}")
     print(f"  Median: {np.median(probs):.3f}")
     print(f"  Std: {np.std(probs):.3f}")
 
-    # Top confident positives
-    top_positive = sorted([p for p in predictions if p['pred_label'] == 1],
-                          key=lambda x: x['pred_proba'], reverse=True)[:5]
+    # Top positives
+    top_positive = sorted(
+        [p for p in all_predictions if p['pred_label'] == 1],
+        key=lambda x: x['pred_proba'],
+        reverse=True
+    )[:10]
 
     if top_positive:
-        print(f"\nTop 5 confident positive predictions:")
+        print(f"\nTop 10 positive predictions:")
         for i, pred in enumerate(top_positive, 1):
-            print(f"  {i}. ({pred['pred_proba']:.3f}) {pred['filename']}: {pred['passage']}")
+            print(f"  {i}. P={pred['pred_proba']:.3f} | {pred['filename']} khabar {pred['khabar_num']}")
 
     # Compare to baseline
     print(f"\n{'='*80}")
-    print(f"COMPARISON TO A1_CONSERVATIVE BASELINE")
+    print(f"COMPARISON TO BASELINE")
     print(f"{'='*80}\n")
     print(f"v79 (A1_conservative): 54.6% positives on Ibn Rabbih")
-    print(f"{args.model.upper()}: {100*positives/total:.1f}% positives on Ibn Rabbih")
+    print(f"v80 (proper akhbars):  {100*positives/total:.1f}% positives")
 
     if positives/total < 0.546:
         improvement = (0.546 - positives/total) * 100
-        print(f"✅ IMPROVEMENT: {improvement:.1f} percentage points reduction in false positives")
+        print(f"[OK] IMPROVEMENT: {improvement:.1f} percentage points reduction in false positives")
     else:
         worse = (positives/total - 0.546) * 100
-        print(f"⚠️  WORSE: {worse:.1f} percentage points more positives")
+        print(f"[WARNING] WORSE: {worse:.1f} percentage points more positives")
 
     # Save results
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    results_file = RESULTS_DIR / f"{args.model}_predictions_on_ibn_rabbih.json"
+    results_file = RESULTS_DIR / "v80_validation_proper_akhbars.json"
     with open(results_file, 'w', encoding='utf-8') as f:
         json.dump({
-            'model': args.model,
-            'corpus': 'Ibn Abd Rabbih CiqdFarid',
+            'model': 'v80',
+            'corpus': 'Ibn Abd Rabbih (proper akhbar extraction)',
+            'total_akhbars_in_corpus': total_akhbars,
             'total_predictions': total,
             'positives': positives,
             'negatives': negatives,
             'positive_rate': positives / total,
             'mean_confidence': float(np.mean(probs)),
-            'predictions': predictions
+            'predictions_sample': top_positive
         }, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✅ Results saved to {results_file.name}")
+    print(f"\n[OK] Results saved to {results_file.name}")
 
-    return 0
+    return {
+        'total': total,
+        'positives': positives,
+        'positive_rate': positives / total,
+        'mean_confidence': np.mean(probs),
+    }
+
 
 if __name__ == '__main__':
-    sys.exit(main())
+    results = validate_v80_on_ibn_rabbih()

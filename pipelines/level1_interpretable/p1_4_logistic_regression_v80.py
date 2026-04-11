@@ -43,17 +43,11 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 # Smart CAMeL Tools loader (works in multiple environments)
 BASE = pathlib.Path(__file__).resolve().parent.parent.parent
-smart_loader_path = BASE / "smart_camel_loader.py"
+sys.path.insert(0, str(BASE / "src"))
 
-if smart_loader_path.exists():
-    # Use smart loader (handles both conda venv and Windows Store Python)
-    spec = importlib.util.spec_from_file_location("smart_camel_loader", smart_loader_path)
-    smart_loader = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(smart_loader)
-    HAS_CAMEL = smart_loader.HAS_CAMEL
-    analyzer = smart_loader.analyzer
-    extract_morpho_safe = smart_loader.extract_morpho_features_safe
-else:
+try:
+    from uqala_nlp.preprocessing.smart_camel_loader import HAS_CAMEL, analyzer, extract_morpho_features_safe as extract_morpho_safe
+except ImportError:
     # Fallback: direct import (should work in conda venv)
     HAS_CAMEL = False
     analyzer = None

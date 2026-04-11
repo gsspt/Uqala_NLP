@@ -72,9 +72,9 @@ def load_camel_tools():
 HAS_CAMEL, analyzer = load_camel_tools()
 
 if HAS_CAMEL:
-    print("✅ CAMeL Tools loaded (morpho features will be extracted)")
+    print("[OK] CAMeL Tools loaded (morpho features will be extracted)")
 else:
-    print("⚠️  CAMeL Tools not available (morpho features will be 0.0 - degraded mode)")
+    print("[WARNING] CAMeL Tools not available (morpho features will be 0.0 - degraded mode)")
 
 
 # ══════════════════════════════════════════════════════════════════════════
