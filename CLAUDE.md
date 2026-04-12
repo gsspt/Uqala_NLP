@@ -161,13 +161,10 @@ Scores (0.0-1.0)
 
 Les `.pkl` sont gitignorés — **re-entraîner si absents** :
 ```bash
-# v80 (recommandé)
+# v80 (standard current)
 python3 pipelines/level1_interpretable/p1_4_logistic_regression_v80.py --cv 5
 python3 pipelines/level2_semi_interpretable/p2_2_xgboost_v80_shap.py --cv 5
-
-# v79 (legacy)
-python3 pipelines/level1_interpretable/p1_3_logistic_regression.py --cv 5
-python3 pipelines/level2_semi_interpretable/p2_1_random_forest_shap.py --cv 5
+python3 pipelines/level2_semi_interpretable/p2_3_hybrid_ensemble_shap.py
 ```
 
 ### Features v80 (27 features) ✅ RECOMMENDED
@@ -202,27 +199,26 @@ python3 pipelines/level2_semi_interpretable/p2_1_random_forest_shap.py --cv 5
 ```
 pipelines/
 ├── level1_interpretable/
-│   ├── p1_3_logistic_regression.py   ← v79 (79 features)
-│   └── p1_4_logistic_regression_v80.py ← v80 (27 features, CV AUC 0.890)
+│   └── p1_4_logistic_regression_v80.py ← v80 (27 features, CV AUC 0.890) ✅ ACTIVE
 ├── level2_semi_interpretable/
-│   ├── p2_1_random_forest_shap.py    ← v79 XGBoost
-│   ├── p2_2_xgboost_v80_shap.py      ← v80 XGBoost (CV AUC 0.8775±0.0227) ✅ NEW
-│   └── p2_3_hybrid_ensemble_shap.py  ← LR + XGBoost ensemble (averaging + agreement) ✅ NEW
+│   ├── p2_2_xgboost_v80_shap.py      ← v80 XGBoost (CV AUC 0.8775±0.0227) ✅ ACTIVE
+│   └── p2_3_hybrid_ensemble_shap.py  ← LR + XGBoost ensemble (averaging + agreement) ✅ ACTIVE
 ├── level4_llm/
 │   ├── p4_1_few_shot.py              ← Base few-shot template
 │   ├── p4_1_few_shot_full_corpus.py  ← DeepSeek sequential (90 min)
-│   └── p4_1_few_shot_8workers.py     ← DeepSeek 8-worker (20 min, $1.50) ✅ NEW
+│   └── p4_1_few_shot_8workers.py     ← DeepSeek 8-worker (20 min, $1.50) ✅ ACTIVE
 ├── hybrid/
 │   └── family_A_cascade/
-│       └── A1_conservative.py        ← Pipeline de production (v79+post-filtre)
+│       └── A1_conservative.py        ← Pipeline de production (v80+post-filtre)
 └── [14 autres pipelines — stubs NotImplementedError]
 ```
 
-**v80 vs v79**:
-- v80 features: 27 (down from 79)
-- v80 removes: f77-f79, f80-f82 (redundant/zeroed by regularization)
-- v80 keeps: f00-f76 core features + top v79 features
-- v80 benefits: Simpler, faster, ensemble generalization
+**v80 Features** (27 features):
+- Removed: f77-f82 (redundant/zeroed by regularization from v79)
+- Kept: f00-f76 core features + top discriminative features
+- Benefits: Simpler, faster, ensemble generalization, better cross-model agreement
+
+**Note:** v79 pipelines removed (2026-04-12 cleanup). Use v80 exclusively for all new work.
 
 ---
 
