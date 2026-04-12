@@ -3,12 +3,574 @@
   "corpus": "Ibn Abd Rabbih (10,286 akhbars)",
   "total_processed": 10286,
   "errors": 0,
-  "true_positives": 74,
-  "false_positives": 10212,
-  "precision": 0.007194244604316547,
+  "true_positives": 80,
+  "false_positives": 10206,
+  "precision": 0.0077775617343962666,
   "few_shot_source": "Real Nisaburi majnun aqil narratives",
   "workers": 8,
   "rate_limit_sec": 0.1,
   "cost_usd": 1.5,
-  "time_minutes_estimated": 20
+  "time_minutes_estimated": 20,
+  "positives": [
+    {
+      "idx": 172,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 172,
+      "text": "% من ظن بالله خيرا جاد مبتدئا % والبخل من سوء ظن المرء بالله % محمد بن يزيد بن عمر بن عبد العزيز قال",
+      "reason": "Le personnage exprime une sagesse paradoxale sur la relation entre la générosité et la confiance en Dieu, tout en étant présenté comme un fou (majnun), illustrant le concept du \"fou sage\"."
+    },
+    {
+      "idx": 263,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 263,
+      "text": "% عليك سلام لا زيارة بيننا % % ولا وصل إلا أن يشاء ابن معمر % قال",
+      "reason": "Le personnage exprime une apparente folie amoureuse (renonciation paradoxale) tout en révélant une sagesse sur la condition humaine et la soumission au destin, caractéristique du \"fou sage\"."
+    },
+    {
+      "idx": 350,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 350,
+      "text": "% خليلي فيما عشتما هل رأيتما % % قتيلا بكى من حب قاتله قبلي % % قال",
+      "reason": "Le poème exprime un paradoxe typique du \"fou sage\": un mort qui pleure par amour pour son meurtrier, illustrant une vérité profonde sur la passion déraisonnable à travers une image absurde."
+    },
+    {
+      "idx": 369,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 369,
+      "text": "% لو يسمعون كما سمعت حديثها % % خروا لعزة راكعين سجودا % % اعزب به | فمن بالباب غير من ذكرت قلت : الأحوص الأنصاري | قال",
+      "reason": "Le poème présente un fou sage (Majnun aqil) qui exprime une sagesse paradoxale à travers un comportement excentrique (extase d'amour) et une vérité cachée sur la puissance de la parole poétique."
+    },
+    {
+      "idx": 446,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 446,
+      "text": "% تقبل توبة من فإني % % سأشكر إن جعلت النقد دينا % قال",
+      "reason": "Le personnage combine folie apparente (comportement poétique extravagant) et sagesse paradoxale (vérité sur la repentance et la critique divine)"
+    },
+    {
+      "idx": 536,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 536,
+      "text": "علامة قال سمعت أبا دواد الإيادي وجرى شيء من ذكر الخطب وتمييز الكلام ، فقال",
+      "reason": "Le personnage est identifié comme \"علامة\" (fou), montre un comportement excentrique (discours sur l'éloquence), et révèle une sagesse paradoxale à travers son analyse du langage."
+    },
+    {
+      "idx": 643,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 643,
+      "text": "% وما أقرب الأشياء حتى يسوقها % % قدر وأبعدها إذا لم تقدر % % عبد الرحمن القصير قال حدثنا يونس بن بلال عن يزيد بن أبي حبيب أن رجلا قال",
+      "reason": "Le personnage montre une folie apparente par son comportement excentrique (déambulation, discours incohérent) tout en exprimant une sagesse paradoxale sur la proximité et l'éloignement déterminés par le destin, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 663,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 663,
+      "text": "% وعساك تأكل من خراك % % وأنت تحسبه كباب % ومن حديث ابن أبي شيبة أن عبد الله بن شداد قال قال",
+      "reason": "Le personnage exprime une sagesse paradoxale à travers une folie apparente, combinant comportement excentrique (manger des excréments en les imaginant comme un délice) et vérité cachée sur l'illusion des perceptions."
+    },
+    {
+      "idx": 743,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 743,
+      "text": "سمعت كلامي قالت ما أحسنه لولا أنك ms0440 تردده | قال أردده ليفهمه من لم يفهمه | قالت إلى أن يفهمه من لم يفهمه يمله من فهمه | الأصمعي قال قال",
+      "reason": "Le personnage montre une folie apparente en répétant son discours, mais révèle une sagesse paradoxale sur la compréhension et l'ennui des auditeurs, illustrant le concept du \"fou sage\"."
+    },
+    {
+      "idx": 755,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 755,
+      "text": "% إذا ما سمعت اللوم فيها رفضته % % فيدخل من أذن ويخرج من أخرى % % فقال",
+      "reason": "Le personnage rejette les critiques (comportement apparemment insensé) mais exprime une vérité sur l'inefficacité des reproches, illustrant le paradoxe du fou sage."
+    },
+    {
+      "idx": 826,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 826,
+      "text": "% لم يخلق الرحمن أحمق لحية % من سائل يرجو الغنى من سائل % PageV02P337 | الأصمعي عن عيسى بن عمر النحوي قال",
+      "reason": "Le personnage est présenté comme \"أحمق\" (insensé) mais énonce une sagesse paradoxale sur la dépendance et l'humilité, correspondant au modèle du fou sage."
+    },
+    {
+      "idx": 829,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 829,
+      "text": "أبو بكر يخضب بالحناء والكتم | وقال مالك بن أسماء بن خارجة لجاريته قومي اخضبي رأسي ولحيتي | فقالت",
+      "reason": "Le personnage (Abu Bakr) se comporte de manière excentrique (se teindre les cheveux et la barbe) tout en étant une figure de sagesse, et la narration présente un paradoxe entre son apparence et son statut."
+    },
+    {
+      "idx": 872,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 872,
+      "text": "| وقولهم لا تهرف بما لا تعرف والهرف الإطناب في المدح والثناء | ومنه قولهم شاكه أبا يسار من دون ذا ينفق الحمار | أخبرنا أبو محمد الأعرابي عن رجل من بني عامر بن صعصعة قال لقي أبو يسار رجلا بالمربد يبيع حمارا ورجل يساومه فجعل أبو يسار يطري الحمار فقال",
+      "reason": "Le personnage Abu Yasar exhibe un comportement excentrique (éloge exagéré d'un âne) tout en véhiculant une sagesse paradoxale sur la vanité des éloges, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 1082,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1082,
+      "text": "% خلعت وأخبث الثقلين % % صوفي إذا خلعا % % يحيى بن عبد العزيز قال حدثني عن إسماعيل رجل من ولد أبي بكر الصديق عن وهب بن منبه قال نصب رجل من بني إسرائيل فخا فجاءت عصفورة فوقعت عليه فقالت ما لي أراك منحنيا قال",
+      "reason": "Le personnage (homme penché) dialogue avec un oiseau, montrant un comportement excentrique, mais la situation révèle une sagesse paradoxale sur la prédation et la vulnérabilité."
+    },
+    {
+      "idx": 1115,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1115,
+      "text": "% يقولون لا تبعد وهم يدفنونني % % وأين مكان البعد إلا مكانيا % % وقال رجل من بين تغلب يقال له أفنون وهو لقبه واسمه صريم بن معشر ابن ذهل بن تيم بن عمرو بن مالك ms0606 بن حبيب بن عمر بن غنم بن تغلب ولقي كانها في الجاهلة فقال",
+      "reason": "Le personnage est qualifié par un surnom (لقب) \"أفنون\" suggérant la folie, exprime une sagesse paradoxale sur la distance et la mort, et son discours contredit l'action des autres, illustrant le paradoxe du fou sage."
+    },
+    {
+      "idx": 1130,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1130,
+      "text": "% أيوب من يشمت بموتك لم يطق % عن نفسه دفعا وهل من مدفع % الأصمعي عن رجل من الأعراب قال",
+      "reason": "Le personnage (l'Arabe) exprime une sagesse paradoxale sur l'incapacité à éviter la mort tout en adoptant un ton excentrique ou détaché, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 1204,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1204,
+      "text": "رجل أريد أن تعلمني النسب ، قال إنما تريد أن تساب الناس | عكرمة عن ابن عباس عن علي بن أبي طالب قال",
+      "reason": "Le personnage montre une sagesse paradoxale en dévoilant les motivations cachées derrière une demande apparente d'apprentissage, caractéristique du \"fou sage\" qui perçoit les vérités sous les apparences."
+    },
+    {
+      "idx": 1406,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1406,
+      "text": "% حلو فكاهته خز عمامته % % في كفه من رقى إبليس مفتاح % % أبو حاتم عن الأصمعي قال",
+      "reason": "Le personnage montre une folie apparente (comportement excentrique avec son turban) tout en détenant une sagesse paradoxale (clé des ruses de Satan), correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 1790,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1790,
+      "text": "% فاليوم أجزى كرة بفرة % % لا بأس بالكرة بعد الفرة % % أبو عقيل الدورقي قال سمعت أبا نضرة يحدث قال",
+      "reason": "Le personnage combine folie apparente (comportement excentrique) et sagesse paradoxale dans ses paroles, illustrant le concept de majnun aqil."
+    },
+    {
+      "idx": 2036,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2036,
+      "text": "ناشب الأعور بن بشامة العنبري وهو أسير في بني سعد بن مالك بن ضبيعة بن قيس بن ثعلبة فقال",
+      "reason": "Le personnage est captif mais parle avec une sagesse paradoxale, montrant la folie apparente masquant une vérité profonde."
+    },
+    {
+      "idx": 2244,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2244,
+      "text": "% وما أنا من حداث أمك بالضحى % % ولا من يزكيها بظهر مغيب % قال",
+      "reason": "Le poète utilise un langage paradoxal et métaphorique pour exprimer un rejet des normes sociales (ne pas être celui qui flatte ou purifie), tout en affirmant une forme de sagesse ou d'intégrité cachée, caractéristique du \"fou sage\"."
+    },
+    {
+      "idx": 2355,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2355,
+      "text": "% تخال أذنيه إذا تشوقا % % والراجز وإن كان لحن فإنه أصاب بالتشبيه | حدث أبو عبد الله محمد بن عرفة بواسط قال حدثني أحمد بن محمد بن يحيى عن الزبير بن بكار عن سليمان بن عباس السعدي عن السائب راوية كثير عزة قال قال",
+      "reason": "Le personnage combine folie apparente (comportement excentrique) et sagesse cachée (vérité paradoxale dans sa poésie)"
+    },
+    {
+      "idx": 2357,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2357,
+      "text": "% خبروني هل على رجل % عاشق في قبلة حرج % فقال كثير قم بنا من عند هذا | عمارة بن عقيل بن بلال بن جرير قال",
+      "reason": "La question pose un paradoxe amoureux avec sagesse implicite dans la réponse poétique"
+    },
+    {
+      "idx": 2515,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2515,
+      "text": "% سليمى أزمعت بينا % % فأين بوصلها أينا % % ولو سمعت مالكا يحرمه ويدي تناله لأحسنت أدبه قال فتبسم الرشيد | وعن أبي شعيب الحراني عن جعفر بن صالح بن كيسان عن أبيه قال",
+      "reason": "Le personnage montre une folie apparente (désir interdit) mais exprime une sagesse paradoxale sur la vertu et la maîtrise de soi, illustrant le concept du \"fou sage\"."
+    },
+    {
+      "idx": 2534,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2534,
+      "text": "% فليأتين عليك يوما مرة % % يبكي عليك مقنعا لا تسمع % % قالت عائشة يا بني فاتق ذلك اليوم | حدث أبو عبد الله محمد بن عرفة بواسط | قال حدثني أحمد بن محمد بن يحيى عن PageV06P028 الزبير بن بكار عن سليمان بن عباس السعدي عن السائب رواية كثير قال قال",
+      "reason": "Le texte présente un fou (مقنعا) qui pleure et parle avec sagesse, correspondant au paradoxe du \"fou sage\" (مجنون عاقل)."
+    },
+    {
+      "idx": 2542,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2542,
+      "text": "% إن البلية من يمل حديثه % % فانقع فؤادك من حديث الوامق % PageV06P032 | فقال",
+      "reason": "Le personnage exprime une sagesse paradoxale sur l'ennui des discours longs tout en tenant un discours poétique, correspondant au type \"fou sage\" (majnun 'aqil)."
+    },
+    {
+      "idx": 2560,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2560,
+      "text": "% لحائم حار حتى لا حياة به % % مشرد عن طريق الماء مطرود % % فلما سمعه المأمون قال",
+      "reason": "Le personnage exprime une sagesse paradoxale à travers un comportement ou un langage apparemment insensé, caractéristique du \"fou sage\" dans la tradition littéraire arabe."
+    },
+    {
+      "idx": 2768,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2768,
+      "text": "% يا من أطال بهجره كلفي % % أسي عليك أشد من كلفي % % قال",
+      "reason": "Le poème exprime une folie amoureuse (كلفي) avec une sagesse paradoxale dans l'intensité de l'attachement, caractéristique du majnun aqil."
+    },
+    {
+      "idx": 2775,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2775,
+      "text": "% إن كنتما لا تشربان معي % % خوف العقاب شربتها وحدي % % محمد بن يزيد الأسدي قال حدثني حبيب بن أوس قال",
+      "reason": "Le personnage boit seul par crainte du châtiment, montrant une folie apparente (boire seul) tout en révélant une sagesse paradoxale sur la peur et la punition."
+    },
+    {
+      "idx": 2802,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2802,
+      "text": "قال محمد بن أحمد الكوفي حدثنا الحسين بن عبد الرحمن عن أبيه قال أمر المأمون أن يحمل إليه عشرة من الزنادقة سموا له بالبصرة فجمعوا وأبصرهم طفيلي فقال",
+      "reason": "Le personnage principal (le \"طفيلي\") montre une folie apparente mais révèle une sagesse cachée à travers ses actions paradoxales, correspondant au modèle du fou sage."
+    },
+    {
+      "idx": 2868,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2868,
+      "text": "المرزباني رائحة طيبة ليست برائحة شراب ولا رائحة طيب فقلت له أخبرني عن هذه الرائحة | فقال",
+      "reason": "Le personnage décrit une odeur paradoxale (ni boisson ni parfum) et donne une réponse énigmatique, typique du fou sage qui révèle une sagesse cachée à travers des apparences déroutantes."
+    },
+    {
+      "idx": 3009,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 3009,
+      "text": "% راجع من يهوى على رغم % % استغرب ضاحكا حتى سمعت ضحكه ثم قال",
+      "reason": "Le personnage montre un comportement excentrique (rire soudain) tout en exprimant une sagesse paradoxale sur l'amour, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 3074,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 3074,
+      "text": "% أفلت من حور الجنان % وخلقت فتنة من يراني % % قال",
+      "reason": "Le personnage exprime un paradoxe typique du \"fou sage\": rejet des récompenses célestes (comportement apparemment insensé) pour une mission terrestre (sagesse cachée de provoquer l'émerveillement divin)."
+    },
+    {
+      "idx": 3221,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 107,
+      "text": "قال: وورد على الحجاج بن يوسف سليك بن سلكة (4) فقال",
+      "reason": "Le personnage Sulaik ibn Sulaka est connu dans la tradition littéraire arabe comme un \"fou sage\" (majnun 'aqil) dont les interactions avec les puissants (comme al-Hajjaj) révèlent une sagesse paradoxale sous une apparence de folie ou d'extravagance."
+    },
+    {
+      "idx": 3346,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 232,
+      "text": "استأذن أبو الدرداء على معاوية فحجبه؛ فقال",
+      "reason": "Le personnage montre une sagesse paradoxale à travers un comportement apparemment insensé, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 3430,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 316,
+      "text": "فقال العلج: حدثني: هل في أصحابك أحد مثلك؟قال",
+      "reason": "Le personnage se présente comme fou tout en révélant une sagesse paradoxale à travers son échange."
+    },
+    {
+      "idx": 3656,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 542,
+      "text": "نظر المنذر بن أبي سبرة إلى أبي الأسود الدؤلي وعليه قميص مرقوع، فقال",
+      "reason": "Le personnage montre un comportement excentrique (porter un vêtement rapiécé) tout en exprimant une sagesse paradoxale sur la valeur intérieure versus l'apparence extérieure."
+    },
+    {
+      "idx": 3714,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 600,
+      "text": "إبراهيم بن المهدي قال",
+      "reason": "Personnage historique connu pour son excentricité et ses paradoxes de sagesse"
+    },
+    {
+      "idx": 3779,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 665,
+      "text": "قيل لنصيب بن رباح: خرف شعرك أبا محجن!قال",
+      "reason": "La réponse combine folie apparente (insulte sur la vieillesse/cheveux blancs) et sagesse cachée (réponse spirituelle montrant l'acceptation du destin)"
+    },
+    {
+      "idx": 3991,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 877,
+      "text": "قال؛ فأسمعته، فقال",
+      "reason": "Le personnage montre folie apparente mais révèle sagesse cachée par ses paroles paradoxales"
+    },
+    {
+      "idx": 4025,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 911,
+      "text": "جائيا من عنده، فقلت: من أين أبا حزرة؟قال",
+      "reason": "La question \"من أين أبا حزرة؟\" (D'où viens-tu, Aba Hazra ?) et la réponse potentielle suggèrent une interaction où un personnage (Aba Hazra) pourrait être perçu comme fou mais exprimer une sagesse paradoxale, typique du \"fou sage\" dans la tradition littéraire arabe classique."
+    },
+    {
+      "idx": 4056,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 942,
+      "text": "عامر الشعبي قال: وفدت سودة بنت عمارة بن الأشتر الهمدانية على معاوية بن أبي سفيان، فاستأذنت عليه فأذن لها، فلما دخلت عليه سلمت عليه، فقال",
+      "reason": "Le personnage combine folie apparente (comportement de deuil excessif) et sagesse cachée (critique politique voilée)"
+    },
+    {
+      "idx": 4060,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 946,
+      "text": "قال: ومن ذلك؟قالت: علي بن أبي طالب رحمه الله تعالى. قال",
+      "reason": "La citation présente Ali ibn Abi Talib comme exemple de \"fou sage\" (majnun aqil) dans la tradition soufie, où son comportement ou ses paroles apparemment insensés révèlent une sagesse profonde."
+    },
+    {
+      "idx": 4165,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1051,
+      "text": "ودخل ابن السماك على محمد بن سليمان بن علي، فرآه معرضا عنه، فقال: مالي أرى الأمير كالعاتب علي؟قال",
+      "reason": "Ibn al-Samak joue le rôle du fou sage en interpellant directement le prince avec une question audacieuse sur son attitude, révélant une vérité sociale sous couvert d'une apparente impertinence."
+    },
+    {
+      "idx": 4168,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1054,
+      "text": "محمد بن القاسم الهاشمي أبو العيناء، قال",
+      "reason": "Le personnage est présenté comme un \"fou sage\" (majnun 'aqil) dans la tradition littéraire arabe classique, combinant des comportements excentriques avec des paroles pleines de sagesse."
+    },
+    {
+      "idx": 4209,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1095,
+      "text": "وقعد الحسن بن سهل لنعيم بن حازم، فأقبل إليه حافيا حاسرا وهو يقول: ذنبي أعظم من السماء، ذنبي أعظم من الأرض. فقال",
+      "reason": "Le personnage se présente comme ayant un \"péché plus grand que le ciel et la terre\" (folie/culpabilité exagérée) mais dans un contexte de rencontre avec une figure d'autorité (al-Hasan ibn Sahl), suggérant une sagesse paradoxale ou une critique déguisée."
+    },
+    {
+      "idx": 4252,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1138,
+      "text": "أمر مصعب بن الزبير برجل من أصحاب المختار أن تضرب عنقه، فقال",
+      "reason": "Le personnage condamné à mort montre une sagesse paradoxale en acceptant son exécution avec une réflexion profonde sur la mortalité, illustrant le concept du \"fou sage\" (majnun aqil)."
+    },
+    {
+      "idx": 4409,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1295,
+      "text": "قال أحمد بن أبي الحواري: قال",
+      "reason": "Chaîne de transmission typique des récits soufis, Ahmad ibn Abi al-Hawari connu pour ses paroles paradoxales et sagesses voilées."
+    },
+    {
+      "idx": 4538,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1424,
+      "text": "وقيل له: من أحلم: أنت أم معاوية؟قال",
+      "reason": "La réponse combine folie apparente (question sur la sagesse) avec une réponse paradoxale montrant une sagesse cachée"
+    },
+    {
+      "idx": 4730,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1616,
+      "text": "وقال له أيضا: أخبرني عن قولك باثنين، هل يستطيع أحدهما أن يخلق خلقا لا يستعين فيه بصاحبه؟قال",
+      "reason": "La question pose un paradoxe divin apparent avec une sagesse sous-jacente sur l'unicité divine, caractéristique du fou sage."
+    },
+    {
+      "idx": 4892,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1778,
+      "text": "ودخل رجل على عمر بن العزيز يعوده في مرضه، فسأله عن علته، فلما أخبره قال: من هذه العلة مات فلان، ومات فلان. فقال",
+      "reason": "Le personnage montre une sagesse paradoxale en confrontant la maladie avec des vérités universelles sur la mortalité, tout en adoptant un comportement apparemment insensible ou excentrique dans un contexte de visite à un malade."
+    },
+    {
+      "idx": 4934,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1820,
+      "text": "الأصمعي عن عيسى بن عمر قال: بينما ابن عرباض يمشي مقدما بطنه، إذ استقبلته الخوارج يحزون الناس بسيوفهم؛ فقال",
+      "reason": "Comportement excentrique (marcher avec le ventre en avant) et sagesse cachée dans l'interaction avec les Kharijites"
+    },
+    {
+      "idx": 4953,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1839,
+      "text": "تكلم ابن السماك يوما وجارية له تسمع كلامه، فلما دخل قال لها: كيف سمعت كلامي؟قالت",
+      "reason": "La servante écoute discrètement puis répond avec une sagesse paradoxale, illustrant le thème du \"fou sage\" où l'apparence de folie (ou de position subalterne) cache une perspicacité profonde."
+    },
+    {
+      "idx": 5000,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1886,
+      "text": "فاستحسنها وقال له: سل حاجتك!فقال: توليني ms0468 مكان ابن رمانة كاتبك. فقال",
+      "reason": "La demande paradoxale (remplacer le secrétaire par un fou) révèle une sagesse cachée dans l'audace"
+    },
+    {
+      "idx": 5093,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 1979,
+      "text": "داود بن أبي هند عن الشعبي: أن رجلا من بني إسرائيل صاد قبرة، فقالت: ما تريد أن تصنع بي؟قال: أذبحك فآكلك!قالت",
+      "reason": "Le personnage (la caille) parle avec sagesse paradoxale, révélant une vérité cachée à travers un dialogue apparemment insensé avec un humain."
+    },
+    {
+      "idx": 5294,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2180,
+      "text": "قال: من قلده الله من أمر الرعية ما قلدك. قال: عظني أبا حازم!قال",
+      "reason": "Le personnage (Abu Hazim) est identifié comme sage mais parle avec des paradoxes qui semblent fous, montrant la sagesse cachée dans des propos apparemment insensés."
+    },
+    {
+      "idx": 5324,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2210,
+      "text": "الفضيل بن عياض قال",
+      "reason": "Le personnage combine apparence de folie (ascète extrême, comportements déroutants) avec sagesse spirituelle profonde, typique du \"fou sage\" dans la tradition soufie."
+    },
+    {
+      "idx": 5366,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2252,
+      "text": "مر المسيح بن مريم عليه السلام بقوم من بني إسرائيل يبكون، فقال",
+      "reason": "Le personnage (Jésus) est identifié comme sage mais son comportement (questionner des pleureurs) révèle une sagesse paradoxale par son questionnement apparemment naïf."
+    },
+    {
+      "idx": 5388,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2274,
+      "text": "وقد حدث أبو القاسم جعفر، أن محمد الحسني قال: أخبرنا محمد بن زكريا الغلابي، قال: حدثنا محمد بن نجيع النوبختي، قال: حدثنا يحيى أن سليمان قال: حدثني أبي، وكان ممن لحق الصحابة، قال: دخلت الكوفة، فإذا أنا برجل يحدث الناس، فقلت: من هذا؟قالوا: بكر بن الطرماح؛ فسمعته يقول: سمعت زيد بن حسين يقول: لما قتل أمير المؤمنين علي بن أبي طالب عليه السلام، أتى بنعيه إلى المدينة كلثوم بن عمرو، فكانت تلك الساعة التي أتى فيها أشبه بالساعة التي قبض فيها رسول الله صلى الله عليه وسلم، من باك وباكية، وصارخ وصارخة، حتى إذا هدأت عبرة البكاء عن الناس، قال",
+      "reason": "Le narrateur rapporte une chaîne de transmission (isnad) et un récit (matn) sur la mort d'Ali, présentant un locuteur (Bakr b. al-Tirmāḥ) dont le comportement public de conteur et le contenu émotionnel pourraient masquer une sagesse intérieure, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 5447,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2333,
+      "text": "يحيى بن عبد العزيز قال: حدثني نعيم عن إسماعيل، رجل من ولد أبي بكر الصديق، عن وهب بن منبه، قال: نصب رجل من بني إسرائيل فخا فجاءت عصفورة فوقعت عليه، فقالت: مالي أراك منحنيا؟قال: لكثرة صلاتي انحنيت قالت: فمالي أراك بادية عظامك؟قال: لكثرة صيامي بدت عظامي!قالت",
+      "reason": "Le personnage affiche une folie apparente (parler à un oiseau) tout en révélant une sagesse paradoxale sur la dévotion excessive."
+    },
+    {
+      "idx": 5512,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2398,
+      "text": "الفضيل بن عياض قال",
+      "reason": "Personnage historique ascétique, parfois présenté comme \"fou sage\" dans les anecdotes soufies"
+    },
+    {
+      "idx": 5531,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2417,
+      "text": "عبد الرحمن بن الحسين عن محمد بن مصعب قال: لما مات داود الطائي تكلم ابن السماك فقال",
+      "reason": "Le personnage (Ibn al-Sammak) exprime une sagesse paradoxale à travers un comportement ou des paroles qui semblent folles, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 5578,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 2464,
+      "text": "أتى علي بن أبي طالب كرم الله وجهه لأشعث يعزيه عن ابنه، فقال",
+      "reason": "Le personnage (Ali) montre sagesse paradoxale dans le deuil, typique du \"fou sage\""
+    },
+    {
+      "idx": 6177,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 3063,
+      "text": "الأصمعي قال: سمعت أعرابيا يشار امرأته، فقالت",
+      "reason": "Le personnage (l'épouse) exprime une sagesse paradoxale à travers un comportement ou une parole apparemment insensée, typique du \"fou sage\"."
+    },
+    {
+      "idx": 6207,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 3093,
+      "text": "أبو حاتم عن أبي زيد قال: رأيت أعرابيا كأن أنفه كوز (1) من ms0785 عظمه؛ فرآنا نضحك منه؛ فقال",
+      "reason": "Le personnage (Bédouin) présente une folie apparente (description physique grotesque) et une sagesse cachée (réponse qui révèle une vérité paradoxale sur le rire et la critique)."
+    },
+    {
+      "idx": 6220,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 3106,
+      "text": "ذكر عند أعرابي الأولاد والانتفاع بهم؛ فقال",
+      "reason": "Le personnage exprime un paradoxe apparent entre folie (déni de paternité) et sagesse (vérité sur la mortalité)"
+    },
+    {
+      "idx": 6339,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 3225,
+      "text": "عدد معاوية بن أبي سفيان على الأحنف ذنوبا، فقال",
+      "reason": "Le personnage (Mu'awiya) énumère des \"péchés\" qui sont en réalité des vertus, montrant le paradoxe du fou sage où des actions apparemment répréhensibles cachent une sagesse ou une vérité supérieure."
+    },
+    {
+      "idx": 6380,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 3266,
+      "text": "بلغني أن الدجال يخرج من غضبة يغضبها. وكان إبرهيم أعور!قال",
+      "reason": "Le personnage (Ibrahim) est identifié comme \"borgne\" (caractéristique physique associée au Dajjal dans la tradition), énonce une déclaration paradoxale liant le Dajjal à la colère, et agit comme une figure marginale véhiculant une sagesse cachée à travers un paradoxe apparent."
+    },
+    {
+      "idx": 7647,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 4533,
+      "text": "قرأت القرآن؟قال. لا!قال",
+      "reason": "La réponse \"Non!\" à la question \"As-tu lu le Coran?\" de la part d'un personnage présenté comme un fou (majnun) peut cacher une sagesse paradoxale (par exemple, comprendre que la vraie lecture est intérieure, non mécanique)."
+    },
+    {
+      "idx": 7905,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 4791,
+      "text": "الحسن بن أبي الحسن قال",
+      "reason": "La chaîne de transmission (isnad) suit le modèle établi et le personnage est présenté comme un transmetteur dans le cadre traditionnel des récits de sagesse."
+    },
+    {
+      "idx": 7906,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 4792,
+      "text": "كيف تجدك أبا كبرة؟فقال صالحا: كيف أنت أبا حمزة؟فقال",
+      "reason": "échange paradoxal montrant sagesse sous folie apparente"
+    },
+    {
+      "idx": 8076,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 4962,
+      "text": "قال سهل بن هارون: فلما رأته صرح بمنعها ولاذ عن مطلبها، أخرجت حقا (3) من زبرجدة خضراء فوضعته بين يديه؛ فقال",
+      "reason": "Le personnage montre une sagesse paradoxale à travers un comportement excentrique (refus initial puis révélation d'un objet précieux) qui suggère une vérité cachée."
+    },
+    {
+      "idx": 8591,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5477,
+      "text": "قال أبو جعفر: بلغني عن هذا الرجل أنه يتأله، فكيف يقول: دع طريقك؟فبلغ ذلك، فقال",
+      "reason": "Le personnage est identifié comme \"celui qui prétend à la divinité\" (يتأله) tout en tenant des propos paradoxaux (\"laisse ta voie\"), montrant une sagesse cachée derrière une apparence d'extravagance ou de folie mystique."
+    },
+    {
+      "idx": 8625,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5511,
+      "text": "قال: أعن حيرة أم عن عمد؟قلت: عن عمد، تركت كذبه إلى صدقه فيما وصف به المنصور من مجده. قال",
+      "reason": "La réponse combine folie apparente (question sur la confusion) et sagesse cachée (choix délibéré de vérité sur la grandeur divine), illustrant le paradoxe du fou sage."
+    },
+    {
+      "idx": 8723,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5609,
+      "text": "حدث أبو اسحاق يحيى بن محمد الحواري، قال: سمعت شيخا من اهل البصرة يقول: قال",
+      "reason": "Le texte présente un fou qui se comporte de manière excentrique (se roule dans la boue, parle aux animaux) tout en exprimant une sagesse paradoxale sur la nature humaine et divine, correspondant au modèle du \"fou sage\"."
+    },
+    {
+      "idx": 8891,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5777,
+      "text": "فأخرج برنامجا من كمه، فكتب البيت؛ فقلنا له: أتكتب بيت شعر سمعته من سكران؟قال",
+      "reason": "Le personnage agit de manière excentrique (écrit un vers entendu d'un ivrogne) mais son geste (sortir un programme de sa manche, écrire) suggère une sagesse ou vérité cachée dans le vers, typique du \"fou sage\"."
+    },
+    {
+      "idx": 9100,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 5986,
+      "text": "بلغني أنك خطبت أم كلثوم بنت أبي بكر. قال: نعم، أفرغبت بها عني، أم رغبت بي عنها؟قال",
+      "reason": "La réponse combine folie apparente (question sur un mariage improbable) et sagesse paradoxale (logique interne qui expose l'absurdité de la situation)"
+    },
+    {
+      "idx": 9260,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 6146,
+      "text": "روى زياد عن مالك عن محمد بن يحيى بن حسان، ان ms1592 جدته عاتبت جده في قلة اتيانه إياها؛ فقال",
+      "reason": "Le personnage masculin exprime une sagesse paradoxale à travers un comportement ou une parole apparemment insensée, correspondant au topos du \"fou sage\"."
+    },
+    {
+      "idx": 9308,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 6194,
+      "text": "ما رأيت من حمقه؟فسكت، فلما أكثر عليه قال: قال",
+      "reason": "La question \"ما رأيت من حمقه؟\" (Qu'as-tu vu de sa folie ?) suivie du silence puis de la réponse suggère un paradoxe où la folie apparente cache une sagesse, correspondant au modèle du fou sage."
+    },
+    {
+      "idx": 9536,
+      "filename": "0328IbnCabdRabbih.CiqdFarid.Masaha002985Vols-ara1",
+      "khabar_num": 6422,
+      "text": "أبو حاتم عن الأصمعي أن ابن عون اشترى برنسا، فمر على معاذة العدوية فقالت: مثلك يلبس هذا؟قال",
+      "reason": "La réponse d'Ibn Awn à Mu'adhah montre un comportement excentrique (porter un burnous modeste malgré son statut) révélant une sagesse cachée sur l'humilité, correspondant au paradoxe du \"fou sage\"."
+    }
+  ]
 }
