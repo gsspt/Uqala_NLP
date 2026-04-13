@@ -1,210 +1,209 @@
 #!/usr/bin/env python3
 """
-akhbar_extraction.py (v3 ISNAD-BASED)
+akhbar_extraction.py
 ─────────────────────────────────────────────────────────────────
 
-STRATÉGIE PHILOLOGIQUE CORRECTE:
-  1. Nettoyer le texte de TOUTES les métadonnées OpenITI
-  2. Chercher les ISNADS (chaînes de transmission) comme délimiteurs naturels
-  3. Chaque nouvel isnad = nouvel akhbar
-  4. Valider que chaque akhbar a une matn substantielle
+Extraction améliorée des akhbars avec compréhension SÉMANTIQUE
+des citations et délimitations logiques.
 
-PRINCIPE:
-  En arabe classique, chaque akhbar commence par une chaîne de transmission (isnad).
-  Les métadonnées OpenITI (# |, ~~, PageXXX, etc.) ne reflètent que la structure du manuscrit,
-  pas la structure narrative.
+PROBLÈME RÉSOLU:
+  • Captures les citations complètes (pas juste "قال X :")
+  • Distingue les vraies sections (# |) des citations (# )
+  • Produit des akhbars cohérents et non tronqués
 
-v3 (this file) REPLACES v2_smart.
-PREVIOUS: v2_heuristic segmentation (1199 akhbars, 1.24M chars)
-CURRENT:  v3 isnad-based segmentation (857 akhbars, 1.64M chars, +401k chars recovered)
+STRATÉGIE: Hybrid (Heuristiques sémantiques + structure)
 """
 
-import re
 import unicodedata
+import pathlib
+import re
 from typing import List, Tuple
-
-# ════════════════════════════════════════════════════════════════════════════════
-# PATTERNS D'ISNAD (verbes de transmission)
-# ════════════════════════════════════════════════════════════════════════════════
-
-ISNAD_VERBS = {
-    # حدّث (raconter/transmettre)
-    'حدثنا', 'حدثني', 'حدثه', 'حدثهم', 'حدثها', 'حدثك', 'حدثت',
-    # أخبر (informer)
-    'أخبرنا', 'أخبرني', 'أخبره', 'أخبرهم', 'أخبرها', 'أخبرك',
-    # أنبأ (annoncer)
-    'أنبأنا', 'أنبأني', 'أنبأه', 'أنبأت', 'أنبأهم',
-    # روى (rapporter)
-    'روى', 'روينا', 'رواه', 'روت', 'رويت', 'رووا',
-    # سمع (entendre/écouter)
-    'سمعت', 'سمعنا', 'سمعه', 'سمعهم', 'سمعتُ', 'سمعوا',
-    # ذكر (mentionner)
-    'ذكر', 'ذكره', 'ذكرنا', 'ذكرت', 'ذكروا',
-    # Autres
-    'أعلمنا', 'أعلمني', 'نقل', 'نقله', 'قرأت', 'قرأنا',
-    'وصل', 'بلغنا', 'بلغني', 'بلغه',
-}
-
-# Construire un regex pour trouver les isnads
-ISNAD_REGEX = r'\b(?:' + '|'.join(re.escape(v) for v in ISNAD_VERBS) + r')\b'
 
 
 def count_arabic_chars(text: str) -> int:
-    """Compter les caractères arabes"""
+    """Count Arabic characters"""
     return sum(1 for c in text if unicodedata.category(c) == 'Lo' and '\u0600' <= c <= '\u06FF')
 
 
-def clean_openiti_metadata(text: str) -> str:
+def is_citation_continuation(last_line: str, current_line: str) -> bool:
     """
-    Nettoyer le texte de TOUTES les métadonnées OpenITI:
-    - Balises # | (titres)
-    - Balises # (sections/citations)
-    - Balises ~~ (contenu marqué)
-    - Références de pages [ ... ]
-    - Numéros de pages PageXXX
-    - Marques de manuscrit msXXXX
-    - Balises Coran ^ ... ^
-    """
-
-    # Enlever les marques de début de ligne
-    text = re.sub(r'^# \|', '', text, flags=re.MULTILINE)  # Titres
-    text = re.sub(r'^# ', '', text, flags=re.MULTILINE)     # Sections
-    text = re.sub(r'^~~', '', text, flags=re.MULTILINE)     # Contenu
-
-    # Enlever les références de page
-    text = re.sub(r'\[\s*[^\]]*?\s*\]', '', text)  # [Page V01P023]
-    text = re.sub(r'PageV?\d+P?\d+', '', text)     # PageV01P023
-    text = re.sub(r'Page\d+', '', text)            # Page123
-
-    # Enlever les marques de manuscrit
-    text = re.sub(r'ms\d+', '', text)  # ms0001, ms1234
-
-    # Enlever les balises Coran
-    text = re.sub(r'\^\s*\(\s*', '(', text)  # ^( → (
-    text = re.sub(r'\s*\)\s*\^', ')', text)  # )^ → )
-
-    # Normaliser les espaces
-    text = re.sub(r'\s+', ' ', text)
-
-    return text.strip()
-
-
-def extract_akhbars_from_file_v3(
-    filepath: str,
-    min_len: int = 80,
-    max_len: int = 5000,
-) -> List[str]:
-    """
-    Extraire les akhbars en segmentant par ISNADS.
-
-    Algorithme:
-    1. Charger le fichier
-    2. Trouver #META#Header#End#
-    3. Nettoyer toutes les métadonnées OpenITI
-    4. Chercher tous les isnads (حدثنا، أخبرني، etc.)
-    5. Segmenter : chaque isnad = début d'un nouvel akhbar
-    6. Valider : chaque akhbar doit avoir 80-5000 caractères arabes
+    Heuristiques pour déterminer si une ligne # est une CITATION
+    (qui continue l'akhbar) ou une VRAIE SECTION (qui le termine).
 
     Args:
-        filepath: Chemin vers le fichier OpenITI
-        min_len: Minimum de caractères arabes (défaut 80)
-        max_len: Maximum de caractères arabes (défaut 5000)
+        last_line: Dernière ligne accumulée (texte de la ligne précédente)
+        current_line: Ligne # actuelle (sans le #)
 
     Returns:
-        List[str]: Akhbars segmentés et validés
+        True si c'est une citation (inclure), False si c'est section (break)
     """
 
-    try:
-        with open(filepath, encoding='utf-8', errors='ignore') as f:
-            lines = f.readlines()
-    except Exception as e:
-        print(f"Erreur lecture {filepath}: {e}")
-        return []
+    current_content = current_line[2:].strip() if len(current_line) > 2 else ""
 
     # ────────────────────────────────────────────────────────
-    # ÉTAPE 1: Extrait le contenu (après métadonnées)
+    # HEURISTIQUE 1: Commence par ( = citation entre parenthèses
     # ────────────────────────────────────────────────────────
-    content_started = False
-    content_lines = []
-
-    for line in lines:
-        if '#META#Header#End#' in line:
-            content_started = True
-            continue
-        if content_started:
-            content_lines.append(line)
-
-    if not content_lines:
-        return []
-
-    raw_text = ''.join(content_lines)
+    if current_content.startswith('('):
+        # Presque toujours une citation au Prophète ou sage
+        # Exemple: ( عدل ساعة ... )
+        return True
 
     # ────────────────────────────────────────────────────────
-    # ÉTAPE 2: Nettoyer toutes les métadonnées OpenITI
+    # HEURISTIQUE 2: Commence par % = poésie citée
     # ────────────────────────────────────────────────────────
-    clean_text = clean_openiti_metadata(raw_text)
-
-    # ────────────────────────────────────────────────────────
-    # ÉTAPE 3: Trouver tous les isnads
-    # ────────────────────────────────────────────────────────
-    isnad_matches = list(re.finditer(ISNAD_REGEX, clean_text))
-
-    if not isnad_matches:
-        # Aucun isnad trouvé → tout le texte = un akhbar
-        n_ar = count_arabic_chars(clean_text)
-        if min_len <= n_ar <= max_len:
-            return [clean_text]
-        return []
+    if current_content.startswith('%'):
+        # C'est une verse poétique citée
+        return True
 
     # ────────────────────────────────────────────────────────
-    # ÉTAPE 4: Segmenter par isnads
+    # HEURISTIQUE 3: Verbe "qāla" en fin de ligne précédente?
     # ────────────────────────────────────────────────────────
-    akhbars = []
+    if last_line and any(verb in last_line for verb in ['قال', 'حدث', 'أخبر', 'روى']):
+        # La ligne # suivante est probablement la citation
+        # Exemple:
+        #   "وقال النبي صلى الله عليه وسلم :"
+        #   "# ( عدل ساعة في حكومة... )"
+        return True
 
-    for i, match in enumerate(isnad_matches):
-        isnad_start = match.start()
+    # ────────────────────────────────────────────────────────
+    # HEURISTIQUE 4: Contient [ ... ] = référence Coran
+    # ────────────────────────────────────────────────────────
+    if '[' in current_content and ']' in current_content:
+        # Probablement une citation avec référence Coran
+        return True
 
-        # Trouver la fin de cet akhbar (= début du prochain isnad)
-        if i + 1 < len(isnad_matches):
-            akhbar_end = isnad_matches[i + 1].start()
-        else:
-            # Dernier isnad → jusqu'à la fin du texte
-            akhbar_end = len(clean_text)
+    # ────────────────────────────────────────────────────────
+    # HEURISTIQUE 5: Est-ce un titre? (# | ou formule titre)
+    # ────────────────────────────────────────────────────────
+    if current_line.startswith('# |'):
+        # C'est un titre → pas une citation
+        return False
 
-        # Extraire le segment
-        segment = clean_text[isnad_start:akhbar_end].strip()
-
-        if not segment:
-            continue
-
-        # Valider
-        n_ar = count_arabic_chars(segment)
-        if min_len <= n_ar <= max_len:
-            akhbars.append(segment)
-
-    return akhbars
+    # Par défaut: c'est une section/break
+    return False
 
 
-# ════════════════════════════════════════════════════════════════════════════════
-# BACKWARD COMPATIBILITY
-# ════════════════════════════════════════════════════════════════════════════════
-
-def extract_akhbars_from_file(
+def extract_akhbars_from_file_v2(
     filepath: str,
     min_len: int = 80,
     max_len: int = 3000,
     allow_partial: bool = False,
 ) -> List[str]:
     """
-    Wrapper pour compatibilité backward avec le code existant.
-    Appelle maintenant la v3 (isnad-based).
+    Extract akhbars with SEMANTIC understanding of citations.
+
+    This version understands that lines starting with "# " can be:
+      a) CITATIONS (continue the akhbar) → include them
+      b) SECTIONS (end the akhbar) → break here
+
+    Args:
+        filepath: Path to OpenITI file
+        min_len: Minimum Arabic characters (default 80)
+        max_len: Maximum Arabic characters (default 3000)
+        allow_partial: If True, keep incomplete akhbars
+
+    Returns:
+        List of complete, coherent akhbars
     """
-    return extract_akhbars_from_file_v3(filepath, min_len, max(max_len, 5000))
+
+    try:
+        with open(filepath, encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
+    except Exception as e:
+        print(f"Error reading {filepath}: {e}")
+        return []
+
+    akhbars = []
+    current_lines = []
+    content_started = False
+
+    for i, line in enumerate(lines):
+        line = line.rstrip('\n\r')
+
+        # ────────────────────────────────────────────────────────
+        # SKIP METADATA
+        # ────────────────────────────────────────────────────────
+        if not content_started:
+            if '#META#Header#End#' in line:
+                content_started = True
+            continue
+
+        # ────────────────────────────────────────────────────────
+        # VRAI TITRE (# |) → FIN D'AKHBAR
+        # ────────────────────────────────────────────────────────
+        if line.startswith('# |'):
+            # Titre de section → toujours un break
+            if current_lines:
+                text = ' '.join(current_lines)
+                n_ar = count_arabic_chars(text)
+                if min_len <= n_ar <= max_len:
+                    akhbars.append(text)
+                elif allow_partial:
+                    akhbars.append(text)
+
+            current_lines = []
+            continue
+
+        # ────────────────────────────────────────────────────────
+        # POTENTIELLE CITATION (# sans |)
+        # ────────────────────────────────────────────────────────
+        if line.startswith('# '):
+            content = line[2:].strip()
+
+            # Déterminer si c'est citation ou section
+            last_line = current_lines[-1] if current_lines else ""
+            is_citation = is_citation_continuation(last_line, line)
+
+            if is_citation:
+                # C'est une CITATION → inclure dans l'akhbar
+                if content:
+                    current_lines.append(content)
+
+            else:
+                # C'est une vraie SECTION → break
+                if current_lines:
+                    text = ' '.join(current_lines)
+                    n_ar = count_arabic_chars(text)
+                    if min_len <= n_ar <= max_len:
+                        akhbars.append(text)
+                    elif allow_partial:
+                        akhbars.append(text)
+
+                current_lines = []
+
+            continue
+
+        # ────────────────────────────────────────────────────────
+        # CONTENU NORMAL (~~ ou autres)
+        # ────────────────────────────────────────────────────────
+        if line.startswith('~~'):
+            content = line[2:].strip()
+            if content:
+                current_lines.append(content)
+
+        # Autres lignes vides/spéciales → ignorer
+        elif line.strip() and not line.startswith('#'):
+            # Parfois du texte sans ~~ → inclure aussi
+            if current_lines:
+                current_lines.append(line.strip())
+
+    # ────────────────────────────────────────────────────────
+    # FIN: Sauvegarder le dernier akhbar
+    # ────────────────────────────────────────────────────────
+    if current_lines:
+        text = ' '.join(current_lines)
+        n_ar = count_arabic_chars(text)
+        if min_len <= n_ar <= max_len:
+            akhbars.append(text)
+        elif allow_partial:
+            akhbars.append(text)
+
+    return akhbars
 
 
-# ════════════════════════════════════════════════════════════════════════════════
+# ════════════════════════════════════════════════════════════════════════════
 # TESTING
-# ════════════════════════════════════════════════════════════════════════════════
+# ════════════════════════════════════════════════════════════════════════════
 
 if __name__ == '__main__':
     import sys
@@ -216,22 +215,46 @@ if __name__ == '__main__':
         "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1"
     )
 
-    print("AKHBAR EXTRACTION v3 (ISNAD-BASED)")
-    print("=" * 100 + "\n")
+    print("Comparing extraction methods:\n")
 
-    akhbars_v3 = extract_akhbars_from_file_v3(filepath)
-    print(f"Total akhbars (v3 isnad): {len(akhbars_v3)}")
-    print(f"Total caractères: {sum(len(a) for a in akhbars_v3):,}")
-    print(f"Moyenne par akhbar: {sum(len(a) for a in akhbars_v3) / len(akhbars_v3) if akhbars_v3 else 0:.0f} chars\n")
+    # Old method
+    from uqala_nlp.preprocessing.akhbar_extraction import extract_akhbars_from_file
 
-    print("=" * 100)
-    print("PREMIERS 5 AKHBARS")
-    print("=" * 100 + "\n")
+    old_akhbars = extract_akhbars_from_file(filepath)
+    print(f"OLD METHOD (v1): {len(old_akhbars)} akhbars")
+    print(f"  Total chars: {sum(len(a) for a in old_akhbars):,}")
 
-    for i, akh in enumerate(akhbars_v3[:5]):
-        print(f"[{i+1}] Longueur: {len(akh)} chars")
-        # Find first isnad verb
-        match = re.search(ISNAD_REGEX, akh)
-        if match:
-            print(f"     Commence par: ...{akh[:80]}...")
-        print()
+    # New method
+    new_akhbars = extract_akhbars_from_file_v2(filepath)
+    print(f"\nNEW METHOD (v2): {len(new_akhbars)} akhbars")
+    print(f"  Total chars: {sum(len(a) for a in new_akhbars):,}")
+
+    # Find differences
+    print(f"\nDifference: {len(new_akhbars) - len(old_akhbars):+d} akhbars")
+    print(
+        f"  "
+        f"{abs(sum(len(a) for a in new_akhbars) - sum(len(a) for a in old_akhbars)):+,} "
+        f"chars"
+    )
+
+    # Show some examples where they differ
+    print("\n" + "=" * 80)
+    print("EXAMPLES: Cases where new method is more complete")
+    print("=" * 80 + "\n")
+
+    # Find akhbars that end with "قال X :"
+    truncated_count = 0
+    for i, akhbar in enumerate(old_akhbars[:100]):
+        if (
+            akhbar.rstrip().endswith(':')
+            and any(v in akhbar for v in ['قال', 'حدث', 'أخبر'])
+        ):
+            truncated_count += 1
+
+            if truncated_count <= 3:
+                print(f"Akhbar #{i} (TRUNCATED in v1):")
+                print(f"  Length: {len(akhbar)}")
+                print(f"  Ends with: ...{akhbar[-80:]}")
+                print()
+
+    print(f"Total truncated akhbars found: {truncated_count}")
