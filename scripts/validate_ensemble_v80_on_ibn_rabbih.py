@@ -270,8 +270,8 @@ def validate_ensemble_on_ibn_rabbih():
             # Score each akhbar
             with tqdm(total=len(akhbars), desc=f"  {filepath.name[:40]:40s}", position=1, leave=False) as pbar_akhbars:
                 for khabar_num, akhbar_raw in enumerate(akhbars):
-                    # Clean isnad
-                    akhbar, _ = split_isnad(akhbar_raw)
+                    # Extract matn (narrative) — split_isnad returns (isnad, matn)
+                    _, akhbar = split_isnad(akhbar_raw)
 
                     try:
                         features = extract_all_features_27(akhbar)

@@ -224,8 +224,8 @@ def validate_v80_on_ibn_rabbih():
 
         # Score each akhbar
         for khabar_num, akhbar_raw in enumerate(akhbars):
-            # CRITICAL: Clean isnad first (split_isnad returns (text_without_isnad, isnad_part))
-            akhbar, _ = split_isnad(akhbar_raw)
+            # CRITICAL: Extract matn (narrative) — split_isnad returns (isnad, matn)
+            _, akhbar = split_isnad(akhbar_raw)
 
             try:
                 features = extract_all_features_27(akhbar)

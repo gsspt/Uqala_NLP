@@ -112,7 +112,7 @@ def extract_text_for_prediction(filename, khabar_num):
         if filename in filepath.name:
             akhbars = extract_akhbars_from_file(str(filepath))
             if 0 <= khabar_num < len(akhbars):
-                akhbar, _ = split_isnad(akhbars[khabar_num])
+                _, akhbar = split_isnad(akhbars[khabar_num])
                 return akhbar
     return None
 

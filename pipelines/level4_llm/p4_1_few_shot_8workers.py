@@ -82,7 +82,9 @@ Majnun aqil = fou sage qui combine:
 3. Sagesse cachée ou vérités paradoxales
 4. Interaction narrative montrant le paradoxe
 
-Répondez UNIQUEMENT: TRUE/FALSE | raison courte"""
+Répondez UNIQUEMENT en deux lignes:
+Ligne 1: TRUE/FALSE | raison courte
+Ligne 2: est complet: TRUE/FALSE (la citation/l'anecdote est elle complète et cohérente?)"""
 
 # GLOBAL RATE LIMITING (thread-safe)
 class RateLimiter:
@@ -121,7 +123,9 @@ def query_deepseek(text):
 CLASSIFIEZ:
 {text}
 
-Répondez: TRUE/FALSE | raison"""
+Répondez:
+Ligne 1: TRUE/FALSE | raison
+Ligne 2: est complet: TRUE/FALSE"""
 
     try:
         response = client.chat.completions.create(
@@ -146,7 +150,7 @@ def load_all_akhbars():
     for filepath in sorted(corpus_root.rglob("*-ara1")):
         akhbars = extract_akhbars_from_file(str(filepath))
         for khabar_num, akhbar_raw in enumerate(akhbars):
-            akhbar, _ = split_isnad(akhbar_raw)
+            _, akhbar = split_isnad(akhbar_raw)
             all_akhbars.append({
                 'filename': filepath.name,
                 'khabar_num': khabar_num,
@@ -158,7 +162,7 @@ def load_all_akhbars():
 
 
 def process_akhbar(akh):
-    """Process single akhbar - returns result dict"""
+    """Process single akhbar - returns result dict with classification + completeness"""
     response = query_deepseek(akh['text'])
 
     if not response:
@@ -168,11 +172,20 @@ def process_akhbar(akh):
             'khabar_num': akh['khabar_num'],
             'text': akh['text'],
             'classification': None,
+            'completeness': None,
             'error': True,
         }
 
-    is_true = response.startswith("TRUE")
-    reason = response.split("|", 1)[1].strip() if "|" in response else "N/A"
+    lines = response.strip().split('\n')
+
+    # Parse line 1: classification
+    line1 = lines[0] if len(lines) > 0 else ""
+    is_true = line1.startswith("TRUE")
+    reason = line1.split("|", 1)[1].strip() if "|" in line1 else "N/A"
+
+    # Parse line 2: completeness (est complet: TRUE/FALSE)
+    line2 = lines[1] if len(lines) > 1 else ""
+    is_complete = "TRUE" in line2.upper()  # TRUE if "est complet: TRUE" or similar
 
     return {
         'idx': akh['idx'],
@@ -181,6 +194,7 @@ def process_akhbar(akh):
         'text': akh['text'],
         'classification': is_true,
         'reason': reason,
+        'completeness': is_complete,
         'error': False,
     }
 
@@ -221,7 +235,9 @@ def classify_full_corpus():
 
     remaining_akhbars = all_akhbars[start_idx:]
     true_count = sum(1 for c in classifications.values() if c.get('classification'))
-    false_count = sum(1 for c in classifications.values() if not c.get('classification'))
+    false_count = sum(1 for c in classifications.values() if not c.get('classification') and not c.get('error'))
+    complete_count = sum(1 for c in classifications.values() if c.get('completeness') and not c.get('error'))
+    incomplete_count = sum(1 for c in classifications.values() if c.get('completeness') is False and not c.get('error'))
 
     with ThreadPoolExecutor(max_workers=8) as executor:
         # Submit all tasks
@@ -245,6 +261,11 @@ def classify_full_corpus():
                     else:
                         false_count += 1
 
+                    if result.get('completeness'):
+                        complete_count += 1
+                    else:
+                        incomplete_count += 1
+
                 pbar.update(1)
 
                 # Save checkpoint every 100
@@ -255,6 +276,8 @@ def classify_full_corpus():
                             'total': len(all_akhbars),
                             'true': true_count,
                             'false': false_count,
+                            'complete': complete_count,
+                            'incomplete': incomplete_count,
                             'classifications': classifications,
                         }, f, ensure_ascii=False, indent=2)
 
@@ -271,6 +294,9 @@ def classify_full_corpus():
     print(f"\nClassification DeepSeek (8 workers):")
     print(f"  ✓ VRAI majnun aqil:  {true_count} ({100*true_count/len(valid):.1f}%)")
     print(f"  ✗ FAUX (générique):  {false_count} ({100*false_count/len(valid):.1f}%)")
+    print(f"\nComplétude des akhbars:")
+    print(f"  ✓ Complet:           {complete_count} ({100*complete_count/len(valid):.1f}%)")
+    print(f"  ✗ Incomplet:         {incomplete_count} ({100*incomplete_count/len(valid):.1f}%)")
 
     if true_count + false_count > 0:
         precision = true_count / (true_count + false_count)
@@ -288,13 +314,21 @@ def classify_full_corpus():
     output_file = RESULTS_DIR / "deepseek_full_corpus_8workers.json"
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump({
-            'model': 'DeepSeek Few-Shot (8 workers)',
+            'model': 'DeepSeek Few-Shot (8 workers) + Completeness Check',
             'corpus': 'Ibn Abd Rabbih (10,286 akhbars)',
+            'extraction_method': 'akhbar_extraction_v2_smart (semantic understanding)',
             'total_processed': len(valid),
             'errors': len(errors),
-            'true_positives': true_count,
-            'false_positives': false_count,
-            'precision': true_count / (true_count + false_count) if (true_count + false_count) > 0 else 0,
+            'classification': {
+                'true_positives': true_count,
+                'false_positives': false_count,
+                'precision': true_count / (true_count + false_count) if (true_count + false_count) > 0 else 0,
+            },
+            'completeness': {
+                'complete': complete_count,
+                'incomplete': incomplete_count,
+                'completion_rate': complete_count / len(valid) if len(valid) > 0 else 0,
+            },
             'few_shot_source': 'Real Nisaburi majnun aqil narratives',
             'workers': 8,
             'rate_limit_sec': 0.1,
@@ -307,6 +341,7 @@ def classify_full_corpus():
                     'khabar_num': c['khabar_num'],
                     'text': c['text'],
                     'reason': c.get('reason', 'N/A'),
+                    'completeness': c.get('completeness', None),
                 }
                 for c in positives_detail
             ],
