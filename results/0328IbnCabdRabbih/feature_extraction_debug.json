@@ -1,0 +1,374 @@
+{
+  "total_akhbars_sampled": 10,
+  "feature_count": 27,
+  "feature_names": [
+    "E1_scene_intro_presence",
+    "E2_witness_verb_density",
+    "E3_dialogue_first_person_density",
+    "E4_direct_address_presence",
+    "E5_divine_personal_intensity",
+    "E6_sacred_spaces_presence",
+    "f00_has_junun",
+    "f01_junun_density",
+    "f02_famous_fool",
+    "f03_junun_count",
+    "f04_junun_specialized",
+    "f05_junun_position",
+    "f06_junun_in_title",
+    "f07_junun_plural",
+    "f08_junun_in_final_third",
+    "f09_jinn_root",
+    "f10_junun_repetition",
+    "f11_junun_morpho",
+    "f12_junun_positive",
+    "f13_junun_good_context",
+    "f14_junun_validation_prox",
+    "f65_root_jnn_density",
+    "f66_root_aql_density",
+    "f67_root_hikma_density",
+    "f68_verb_density",
+    "f69_noun_density",
+    "f70_adj_density"
+  ],
+  "insertion_order": [
+    "f00_has_junun",
+    "f01_junun_density",
+    "f02_famous_fool",
+    "f03_junun_count",
+    "f04_junun_specialized",
+    "f05_junun_position",
+    "f06_junun_in_title",
+    "f07_junun_plural",
+    "f08_junun_in_final_third",
+    "f09_jinn_root",
+    "f10_junun_repetition",
+    "f11_junun_morpho",
+    "f12_junun_positive",
+    "f13_junun_good_context",
+    "f14_junun_validation_prox",
+    "f65_root_jnn_density",
+    "f66_root_aql_density",
+    "f67_root_hikma_density",
+    "f68_verb_density",
+    "f69_noun_density",
+    "f70_adj_density",
+    "E1_scene_intro_presence",
+    "E2_witness_verb_density",
+    "E3_dialogue_first_person_density",
+    "E4_direct_address_presence",
+    "E5_divine_personal_intensity",
+    "E6_sacred_spaces_presence"
+  ],
+  "insertion_order_consistent": true,
+  "nan_values_found": 0,
+  "inf_values_found": 0,
+  "feature_statistics": {
+    "f00_has_junun": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f01_junun_density": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f02_famous_fool": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.1
+    },
+    "f03_junun_count": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f04_junun_specialized": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f05_junun_position": {
+      "min": 0.5,
+      "max": 0.5,
+      "mean": 0.5
+    },
+    "f06_junun_in_title": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f07_junun_plural": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f08_junun_in_final_third": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f09_jinn_root": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.1
+    },
+    "f10_junun_repetition": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f11_junun_morpho": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f12_junun_positive": {
+      "min": 1.0,
+      "max": 1.0,
+      "mean": 1.0
+    },
+    "f13_junun_good_context": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f14_junun_validation_prox": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f65_root_jnn_density": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "f66_root_aql_density": {
+      "min": 0.0,
+      "max": 0.004608294930875576,
+      "mean": 0.0004608294930875576
+    },
+    "f67_root_hikma_density": {
+      "min": 0.0,
+      "max": 0.01282051282051282,
+      "mean": 0.002138582331301817
+    },
+    "f68_verb_density": {
+      "min": 0.05,
+      "max": 0.2814814814814815,
+      "mean": 0.19220231545317387
+    },
+    "f69_noun_density": {
+      "min": 0.27283950617283953,
+      "max": 0.5,
+      "mean": 0.35685293863807976
+    },
+    "f70_adj_density": {
+      "min": 0.014705882352941176,
+      "max": 0.11538461538461539,
+      "mean": 0.0660304942850203
+    },
+    "E1_scene_intro_presence": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.1
+    },
+    "E2_witness_verb_density": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "E3_dialogue_first_person_density": {
+      "min": 0.0,
+      "max": 0.01347305389221557,
+      "mean": 0.0021834515645271163
+    },
+    "E4_direct_address_presence": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "E5_divine_personal_intensity": {
+      "min": 0.0,
+      "max": 0.2,
+      "mean": 0.02
+    },
+    "E6_sacred_spaces_presence": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.1
+    }
+  },
+  "sample_akhbars": [
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 0,
+      "text_preview": "مدار [ الدين و ] الدنيا | وهي حمى الله في بلاده وظله الممدود على عباده ، به يمتن",
+      "features": {
+        "f00_has_junun": 0.0,
+        "f01_junun_density": 0.0,
+        "f02_famous_fool": 0.0,
+        "f03_junun_count": 0.0,
+        "f04_junun_specialized": 0.0,
+        "f05_junun_position": 0.5,
+        "f06_junun_in_title": 0.0,
+        "f07_junun_plural": 0.0,
+        "f08_junun_in_final_third": 0.0,
+        "f09_jinn_root": 0.0,
+        "f10_junun_repetition": 0.0,
+        "f11_junun_morpho": 0.0,
+        "f12_junun_positive": 1.0,
+        "f13_junun_good_context": 0.0,
+        "f14_junun_validation_prox": 0.0,
+        "f65_root_jnn_density": 0.0,
+        "f66_root_aql_density": 0.0,
+        "f67_root_hikma_density": 0.008565310492505354,
+        "f68_verb_density": 0.1841541755888651,
+        "f69_noun_density": 0.3297644539614561,
+        "f70_adj_density": 0.057815845824411134,
+        "E1_scene_intro_presence": 0.0,
+        "E2_witness_verb_density": 0.0,
+        "E3_dialogue_first_person_density": 0.0,
+        "E4_direct_address_presence": 0.0,
+        "E5_divine_personal_intensity": 0.0,
+        "E6_sacred_spaces_presence": 0.0
+      }
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 1,
+      "text_preview": "الرسول وأولي الأمر منكم ) ^ [ النساء : ] | وقال أبو هريرة : لما نزلت هذه الآية أ",
+      "features": {
+        "f00_has_junun": 0.0,
+        "f01_junun_density": 0.0,
+        "f02_famous_fool": 0.0,
+        "f03_junun_count": 0.0,
+        "f04_junun_specialized": 0.0,
+        "f05_junun_position": 0.5,
+        "f06_junun_in_title": 0.0,
+        "f07_junun_plural": 0.0,
+        "f08_junun_in_final_third": 0.0,
+        "f09_jinn_root": 0.0,
+        "f10_junun_repetition": 0.0,
+        "f11_junun_morpho": 0.0,
+        "f12_junun_positive": 1.0,
+        "f13_junun_good_context": 0.0,
+        "f14_junun_validation_prox": 0.0,
+        "f65_root_jnn_density": 0.0,
+        "f66_root_aql_density": 0.004608294930875576,
+        "f67_root_hikma_density": 0.0,
+        "f68_verb_density": 0.2119815668202765,
+        "f69_noun_density": 0.31336405529953915,
+        "f70_adj_density": 0.07142857142857142,
+        "E1_scene_intro_presence": 0.0,
+        "E2_witness_verb_density": 0.0,
+        "E3_dialogue_first_person_density": 0.0056179775280898875,
+        "E4_direct_address_presence": 0.0,
+        "E5_divine_personal_intensity": 0.0,
+        "E6_sacred_spaces_presence": 0.0
+      }
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 2,
+      "text_preview": "حاجبك ، فإنه وجهك الذي به تلقى الناس : إن أحسن فأنت المحسن ، وإن أساء فأنت المسي",
+      "features": {
+        "f00_has_junun": 0.0,
+        "f01_junun_density": 0.0,
+        "f02_famous_fool": 1.0,
+        "f03_junun_count": 0.0,
+        "f04_junun_specialized": 0.0,
+        "f05_junun_position": 0.5,
+        "f06_junun_in_title": 0.0,
+        "f07_junun_plural": 0.0,
+        "f08_junun_in_final_third": 0.0,
+        "f09_jinn_root": 0.0,
+        "f10_junun_repetition": 0.0,
+        "f11_junun_morpho": 0.0,
+        "f12_junun_positive": 1.0,
+        "f13_junun_good_context": 0.0,
+        "f14_junun_validation_prox": 0.0,
+        "f65_root_jnn_density": 0.0,
+        "f66_root_aql_density": 0.0,
+        "f67_root_hikma_density": 0.0,
+        "f68_verb_density": 0.2814814814814815,
+        "f69_noun_density": 0.27283950617283953,
+        "f70_adj_density": 0.04814814814814815,
+        "E1_scene_intro_presence": 1.0,
+        "E2_witness_verb_density": 0.0,
+        "E3_dialogue_first_person_density": 0.01347305389221557,
+        "E4_direct_address_presence": 0.0,
+        "E5_divine_personal_intensity": 0.0,
+        "E6_sacred_spaces_presence": 0.0
+      }
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 3,
+      "text_preview": "بن حميد قال : إني لواقف على رأس المأمون يوما وقد جلس للمظالم ، فكان آخر من تقدم ",
+      "features": {
+        "f00_has_junun": 0.0,
+        "f01_junun_density": 0.0,
+        "f02_famous_fool": 0.0,
+        "f03_junun_count": 0.0,
+        "f04_junun_specialized": 0.0,
+        "f05_junun_position": 0.5,
+        "f06_junun_in_title": 0.0,
+        "f07_junun_plural": 0.0,
+        "f08_junun_in_final_third": 0.0,
+        "f09_jinn_root": 1.0,
+        "f10_junun_repetition": 0.0,
+        "f11_junun_morpho": 0.0,
+        "f12_junun_positive": 1.0,
+        "f13_junun_good_context": 0.0,
+        "f14_junun_validation_prox": 0.0,
+        "f65_root_jnn_density": 0.0,
+        "f66_root_aql_density": 0.0,
+        "f67_root_hikma_density": 0.0,
+        "f68_verb_density": 0.22026431718061673,
+        "f69_noun_density": 0.33590308370044053,
+        "f70_adj_density": 0.0473568281938326,
+        "E1_scene_intro_presence": 0.0,
+        "E2_witness_verb_density": 0.0,
+        "E3_dialogue_first_person_density": 0.0027434842249657062,
+        "E4_direct_address_presence": 0.0,
+        "E5_divine_personal_intensity": 0.2,
+        "E6_sacred_spaces_presence": 0.0
+      }
+    },
+    {
+      "filename": "0328IbnCabdRabbih.CiqdFarid.JK009200-ara1",
+      "khabar_num": 4,
+      "text_preview": "الأعرج : الإمام سوق ، فما نفق عنده جلب إليه | ولما أتي عمر بن الخطاب رضي الله عن",
+      "features": {
+        "f00_has_junun": 0.0,
+        "f01_junun_density": 0.0,
+        "f02_famous_fool": 0.0,
+        "f03_junun_count": 0.0,
+        "f04_junun_specialized": 0.0,
+        "f05_junun_position": 0.5,
+        "f06_junun_in_title": 0.0,
+        "f07_junun_plural": 0.0,
+        "f08_junun_in_final_third": 0.0,
+        "f09_jinn_root": 0.0,
+        "f10_junun_repetition": 0.0,
+        "f11_junun_morpho": 0.0,
+        "f12_junun_positive": 1.0,
+        "f13_junun_good_context": 0.0,
+        "f14_junun_validation_prox": 0.0,
+        "f65_root_jnn_density": 0.0,
+        "f66_root_aql_density": 0.0,
+        "f67_root_hikma_density": 0.0,
+        "f68_verb_density": 0.22794117647058823,
+        "f69_noun_density": 0.3088235294117647,
+        "f70_adj_density": 0.014705882352941176,
+        "E1_scene_intro_presence": 0.0,
+        "E2_witness_verb_density": 0.0,
+        "E3_dialogue_first_person_density": 0.0,
+        "E4_direct_address_presence": 0.0,
+        "E5_divine_personal_intensity": 0.0,
+        "E6_sacred_spaces_presence": 1.0
+      }
+    }
+  ]
+}

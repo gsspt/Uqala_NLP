@@ -1,42 +1,42 @@
 #!/usr/bin/env python3
 """
-validate_v80_on_ibn_rabbih.py
+validate_with_variable_thresholds.py
 ──────────────────────────────────────────────────────────────
-Proper validation of v80 on Ibn Abd Rabbih using:
-1. Correct akhbar extraction (not sliding window)
-2. Isnad filtering (required preprocessing)
-3. All 27 features with correct feature order
+Test LR v80 and XGBoost v80 at different probability thresholds.
+
+This script:
+1. Loads both models
+2. Tests thresholds: 0.3, 0.4, 0.5, 0.6, 0.7, 0.8
+3. For each threshold: counts positives and measures agreement
+4. Creates a threshold optimization report
 
 Usage:
-  python validate_v80_on_ibn_rabbih.py
+  python scripts/validate_with_variable_thresholds.py
 """
 
 import json
 import sys
 import pathlib
 import pickle
-import importlib.util
 import numpy as np
-from collections import Counter
+from collections import defaultdict
 from tqdm import tqdm
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-# Setup paths
 BASE = pathlib.Path(__file__).resolve().parent.parent
 MODELS_DIR = BASE / "models"
 RESULTS_DIR = BASE / "results" / "0328IbnCabdRabbih"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
-# Import modules
 sys.path.insert(0, str(BASE / "src"))
 from uqala_nlp.preprocessing.akhbar_extraction import extract_akhbars_from_file
 from uqala_nlp.preprocessing.isnad_filter import split_isnad
 from uqala_nlp.preprocessing.smart_camel_loader import HAS_CAMEL, extract_morpho_features_safe as extract_morpho_safe
 
-# ══════════════════════════════════════════════════════════════════════════════
-# FEATURE EXTRACTION (same as v80 pipeline, 27 features)
-# ══════════════════════════════════════════════════════════════════════════════
+# ════════════════════════════════════════════════════════════════════════════════
+# FEATURE EXTRACTION (same as validation scripts, 27 features)
+# ════════════════════════════════════════════════════════════════════════════════
 
 import re
 
@@ -162,7 +162,7 @@ def extract_morphological_features_6(text):
 
 
 def extract_all_features_27(text):
-    """Extract all 27 v80 features in INSERTION ORDER (dict.values())"""
+    """Extract all 27 v80 features in INSERTION ORDER"""
     features = {}
     features.update(extract_junun_features_15(text))
     features.update(extract_morphological_features_6(text))
@@ -170,100 +170,88 @@ def extract_all_features_27(text):
     return features
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# VALIDATION
-# ══════════════════════════════════════════════════════════════════════════════
+# ════════════════════════════════════════════════════════════════════════════════
+# THRESHOLD TESTING
+# ════════════════════════════════════════════════════════════════════════════════
 
-def validate_v80_on_ibn_rabbih():
-    """Validate v80 on all Ibn Abd Rabbih akhbars with proper preprocessing"""
+def test_thresholds():
+    """Test LR and XGBoost at multiple thresholds"""
 
-    # Load model
-    model_path = MODELS_DIR / 'lr_classifier_v80.pkl'
-    if not model_path.exists():
-        print(f"ERROR: Model not found at {model_path}")
+    # Load models
+    print("="*100)
+    print("THRESHOLD OPTIMIZATION: LR v80 vs XGBoost v80")
+    print("="*100)
+
+    print("\n[1] Loading models...")
+
+    lr_path = MODELS_DIR / 'lr_classifier_v80.pkl'
+    xgb_path = MODELS_DIR / 'xgb_classifier_v80.pkl'
+
+    if not lr_path.exists() or not xgb_path.exists():
+        print("ERROR: Models not found")
         return None
 
     try:
-        with open(model_path, 'rb') as f:
-            model_data = pickle.load(f)
-        if isinstance(model_data, dict) and 'clf' in model_data:
-            clf = model_data['clf']
-            scaler = model_data.get('scaler', None)
-        else:
-            clf = model_data
-            scaler = None
-        print(f"[OK] Loaded model from {model_path.name}")
+        with open(lr_path, 'rb') as f:
+            lr_data = pickle.load(f)
+        lr_clf = lr_data['clf'] if isinstance(lr_data, dict) else lr_data
+        lr_scaler = lr_data.get('scaler') if isinstance(lr_data, dict) else None
+
+        with open(xgb_path, 'rb') as f:
+            xgb_data = pickle.load(f)
+        xgb_clf = xgb_data['clf'] if isinstance(xgb_data, dict) else xgb_data
+        xgb_scaler = xgb_data.get('scaler') if isinstance(xgb_data, dict) else None
+
+        print(f"  [OK] Loaded LR and XGBoost models")
     except Exception as e:
-        print(f"ERROR loading model: {e}")
+        print(f"ERROR loading models: {e}")
         return None
 
-    print(f"     CAMeL Tools: {'Available' if HAS_CAMEL else 'Not available (degraded)'}\n")
+    # Load all predictions with probabilities
+    print("\n[2] Extracting akhbars and computing probabilities...")
 
-    # Find all Ibn Abd Rabbih files
     corpus_root = BASE / "openiti_corpus" / "data" / "0328IbnCabdRabbih"
-    if not corpus_root.exists():
-        print(f"ERROR: Corpus path not found: {corpus_root}")
-        return None
-
     text_files = sorted(corpus_root.rglob("*-ara1"))
-    print(f"[OK] Found {len(text_files)} OpenITI files\n")
-    print("Extracting akhbars and making predictions...\n")
 
     all_predictions = []
     total_akhbars = 0
-    processed_files = 0
 
     with tqdm(total=len(text_files), desc="  Files", position=0, leave=True) as pbar_files:
-        for file_idx, filepath in enumerate(text_files, 1):
-            # Extract akhbars from file
+        for filepath in text_files:
             akhbars = extract_akhbars_from_file(str(filepath))
             if not akhbars:
                 pbar_files.update(1)
                 continue
 
-            processed_files += 1
             file_akhbar_count = len(akhbars)
             total_akhbars += file_akhbar_count
 
-            # Score each akhbar with nested progress bar
             with tqdm(total=file_akhbar_count, desc=f"  {filepath.name[:40]:40s}", position=1, leave=False) as pbar_akhbars:
                 for khabar_num, akhbar_raw in enumerate(akhbars):
-                    # CRITICAL: Extract matn (narrative) — split_isnad returns (isnad, matn)
                     _, akhbar = split_isnad(akhbar_raw)
 
                     try:
                         features = extract_all_features_27(akhbar)
-
-                        # Check we have all 27 features
                         if len(features) != 27:
                             pbar_akhbars.update(1)
                             continue
 
-                        # IMPORTANT: use insertion order (dict.values()), NOT sorted()
-                        feature_vector = np.array(list(features.values())).reshape(1, -1)
+                        fv = np.array(list(features.values())).reshape(1, -1)
+                        fv = np.nan_to_num(fv, nan=0.0, posinf=0.0, neginf=0.0)
 
-                        # Scale if available
-                        if scaler:
-                            feature_vector = scaler.transform(feature_vector)
+                        # Get probabilities
+                        X_lr = lr_scaler.transform(fv) if lr_scaler else fv
+                        X_xgb = xgb_scaler.transform(fv) if xgb_scaler else fv
 
-                        # Predict
-                        pred_proba = clf.predict_proba(feature_vector)[0, 1]
-                        pred_label = clf.predict(feature_vector)[0]
+                        p_lr = float(lr_clf.predict_proba(X_lr)[0, 1])
+                        p_xgb = float(xgb_clf.predict_proba(X_xgb)[0, 1])
 
-                        # Store full text for positives
-                        pred_entry = {
+                        all_predictions.append({
                             'filename': filepath.name,
                             'khabar_num': khabar_num,
-                            'pred_proba': float(pred_proba),
-                            'pred_label': int(pred_label),
-                            'text_length': len(akhbar),
-                        }
-
-                        # Add full text if positive
-                        if pred_label == 1:
-                            pred_entry['text'] = akhbar
-
-                        all_predictions.append(pred_entry)
+                            'p_lr': p_lr,
+                            'p_xgb': p_xgb,
+                        })
                     except Exception as e:
                         pass
 
@@ -271,99 +259,96 @@ def validate_v80_on_ibn_rabbih():
 
             pbar_files.update(1)
 
-    if not all_predictions:
-        print("\nERROR: No predictions generated")
-        return None
+    print(f"\n[OK] Processed {total_akhbars} akhbars, {len(all_predictions)} predictions\n")
 
-    # Analysis
-    print(f"\n{'='*80}")
-    print(f"VALIDATION RESULTS: v80 ON IBN ABD RABBIH")
-    print(f"{'='*80}\n")
+    # Test thresholds
+    thresholds = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 
-    total = len(all_predictions)
-    positives = sum(1 for p in all_predictions if p['pred_label'] == 1)
-    negatives = total - positives
+    print("[3] Testing thresholds...")
+    print("    " + "-"*96 + "\n")
+    print(f"    {'Threshold':>10} | {'LR Pos':>8} {'(%)':>6} | {'XGB Pos':>8} {'(%)':>6} | {'Agreement':>10} | {'Jaccard':>8}")
+    print("    " + "-"*96)
 
-    print(f"Total akhbars processed: {total_akhbars}")
-    print(f"Predictions made: {total}")
-    print(f"  Positive: {positives} ({100*positives/total:.1f}%)")
-    print(f"  Negative: {negatives} ({100*negatives/total:.1f}%)")
+    threshold_results = {}
 
-    probs = [p['pred_proba'] for p in all_predictions]
-    print(f"\nPrediction confidence:")
-    print(f"  Mean: {np.mean(probs):.3f}")
-    print(f"  Median: {np.median(probs):.3f}")
-    print(f"  Std: {np.std(probs):.3f}")
+    for threshold in thresholds:
+        lr_pos = set()
+        xgb_pos = set()
 
-    # Top positives
-    top_positive = sorted(
-        [p for p in all_predictions if p['pred_label'] == 1],
-        key=lambda x: x['pred_proba'],
-        reverse=True
-    )[:10]
+        for i, pred in enumerate(all_predictions):
+            if pred['p_lr'] >= threshold:
+                lr_pos.add(i)
+            if pred['p_xgb'] >= threshold:
+                xgb_pos.add(i)
 
-    if top_positive:
-        print(f"\nTop 10 positive predictions:")
-        for i, pred in enumerate(top_positive, 1):
-            print(f"  {i}. P={pred['pred_proba']:.3f} | {pred['filename']} khabar {pred['khabar_num']}")
+        # Calculate agreement
+        both = lr_pos & xgb_pos
+        either = lr_pos | xgb_pos
+        union = len(either) if either else 1
 
-    # Compare to baseline
-    print(f"\n{'='*80}")
-    print(f"COMPARISON TO BASELINE")
-    print(f"{'='*80}\n")
-    print(f"v79 (A1_conservative): 54.6% positives on Ibn Rabbih")
-    print(f"v80 (proper akhbars):  {100*positives/total:.1f}% positives")
+        jaccard = len(both) / union * 100 if union > 0 else 0
+        overlap = len(both)
 
-    if positives/total < 0.546:
-        improvement = (0.546 - positives/total) * 100
-        print(f"[OK] IMPROVEMENT: {improvement:.1f} percentage points reduction in false positives")
-    else:
-        worse = (positives/total - 0.546) * 100
-        print(f"[WARNING] WORSE: {worse:.1f} percentage points more positives")
+        lr_pct = 100 * len(lr_pos) / len(all_predictions)
+        xgb_pct = 100 * len(xgb_pos) / len(all_predictions)
 
-    # Collect all positives with full text
-    all_positives = sorted(
-        [p for p in all_predictions if p['pred_label'] == 1],
-        key=lambda x: x['pred_proba'],
-        reverse=True
-    )
+        threshold_results[threshold] = {
+            'lr_count': len(lr_pos),
+            'lr_pct': lr_pct,
+            'xgb_count': len(xgb_pos),
+            'xgb_pct': xgb_pct,
+            'agreement_count': overlap,
+            'jaccard': jaccard,
+        }
+
+        # Print
+        print(
+            f"    {threshold:10.1f} | {len(lr_pos):8d} {lr_pct:5.1f}% | "
+            f"{len(xgb_pos):8d} {xgb_pct:5.1f}% | {overlap:10d} | {jaccard:7.1f}%"
+        )
+
+    print("\n    " + "-"*96)
+
+    # Find best threshold for agreement
+    best_jaccard_threshold = max(thresholds, key=lambda t: threshold_results[t]['jaccard'])
+    best_agreement = threshold_results[best_jaccard_threshold]
+
+    print(f"\n    Best Jaccard agreement: threshold={best_jaccard_threshold}")
+    print(f"      LR: {best_agreement['lr_count']} positives ({best_agreement['lr_pct']:.1f}%)")
+    print(f"      XGBoost: {best_agreement['xgb_count']} positives ({best_agreement['xgb_pct']:.1f}%)")
+    print(f"      Agreement: {best_agreement['agreement_count']} ({best_agreement['jaccard']:.1f}% Jaccard)")
 
     # Save results
-    results_file = RESULTS_DIR / "v80_validation_proper_akhbars.json"
-    with open(results_file, 'w', encoding='utf-8') as f:
+    print(f"\n[4] Saving threshold analysis report...")
+
+    report_file = RESULTS_DIR / "threshold_optimization_analysis.json"
+    with open(report_file, 'w', encoding='utf-8') as f:
         json.dump({
-            'model': 'v80',
-            'corpus': 'Ibn Abd Rabbih (proper akhbar extraction)',
-            'extraction_method': 'akhbar_extraction_v2_smart (semantic understanding)',
-            'total_akhbars_in_corpus': total_akhbars,
-            'total_predictions': total,
-            'positives': positives,
-            'negatives': negatives,
-            'positive_rate': positives / total,
-            'mean_confidence': float(np.mean(probs)),
-            'positives_detailed': [
-                {
-                    'idx': i+1,
-                    'filename': p['filename'],
-                    'khabar_num': p['khabar_num'],
-                    'pred_proba': p['pred_proba'],
-                    'text_length': p['text_length'],
-                    'text': p.get('text', '[NOT STORED]'),
+            'total_akhbars': total_akhbars,
+            'total_predictions': len(all_predictions),
+            'thresholds_tested': thresholds,
+            'threshold_results': {
+                str(t): {
+                    'lr_count': int(r['lr_count']),
+                    'lr_pct': float(r['lr_pct']),
+                    'xgb_count': int(r['xgb_count']),
+                    'xgb_pct': float(r['xgb_pct']),
+                    'agreement_count': int(r['agreement_count']),
+                    'jaccard_agreement': float(r['jaccard']),
                 }
-                for i, p in enumerate(all_positives)
-            ]
+                for t, r in threshold_results.items()
+            },
+            'best_threshold_for_agreement': float(best_jaccard_threshold),
         }, f, ensure_ascii=False, indent=2)
 
-    print(f"\n[OK] Results saved to {results_file.name}")
-    print(f"    All {positives} positives with full text stored in JSON\n")
+    print(f"    [OK] Report saved to: {report_file.name}\n")
 
-    return {
-        'total': total,
-        'positives': positives,
-        'positive_rate': positives / total,
-        'mean_confidence': np.mean(probs),
-    }
+    print("="*100)
+    print("THRESHOLD ANALYSIS COMPLETE")
+    print("="*100)
+
+    return threshold_results
 
 
 if __name__ == '__main__':
-    results = validate_v80_on_ibn_rabbih()
+    test_thresholds()

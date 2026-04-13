@@ -1,0 +1,41 @@
+{
+  "lr_count": 606,
+  "xgb_count": 66,
+  "ensemble_count": 238,
+  "all_three_agree": 66,
+  "lr_xgb_only": 0,
+  "lr_ensemble_only": 172,
+  "xgb_ensemble_only": 0,
+  "lr_only": 368,
+  "xgb_only": 0,
+  "ensemble_only": 0,
+  "agreement_jaccard": {
+    "lr_xgb": 10.891089108910892,
+    "lr_ensemble": 39.273927392739274,
+    "xgb_ensemble": 27.73109243697479
+  },
+  "model_stats": {
+    "lr": {
+      "mean_proba": 0.7071981945899816,
+      "median_proba": 0.7050135984422262,
+      "min_proba": 0.5006733440756963,
+      "max_proba": 0.9871006962484125
+    },
+    "xgb": {
+      "mean_proba": 0.6381845790328402,
+      "median_proba": 0.6252789199352264,
+      "min_proba": 0.501119077205658,
+      "max_proba": 0.8736624717712402
+    },
+    "ensemble": {
+      "mean_proba": 0.6135632078100915,
+      "median_proba": 0.5771621351470553,
+      "min_proba": 0.500397148802574,
+      "max_proba": 0.9084270561979059
+    }
+  },
+  "disagreement_samples": {
+    "lr_xgb_disagree_count": 540,
+    "ensemble_disagree_count": 368
+  }
+}

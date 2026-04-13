@@ -1,0 +1,63 @@
+{
+  "total_akhbars": 5485,
+  "total_predictions": 5485,
+  "thresholds_tested": [
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8
+  ],
+  "threshold_results": {
+    "0.3": {
+      "lr_count": 1291,
+      "lr_pct": 23.536918869644484,
+      "xgb_count": 195,
+      "xgb_pct": 3.555150410209663,
+      "agreement_count": 194,
+      "jaccard_agreement": 15.015479876160992
+    },
+    "0.4": {
+      "lr_count": 844,
+      "lr_pct": 15.387420237010028,
+      "xgb_count": 116,
+      "xgb_pct": 2.11485870556062,
+      "agreement_count": 115,
+      "jaccard_agreement": 13.609467455621301
+    },
+    "0.5": {
+      "lr_count": 606,
+      "lr_pct": 11.048313582497721,
+      "xgb_count": 66,
+      "xgb_pct": 1.203281677301732,
+      "agreement_count": 66,
+      "jaccard_agreement": 10.891089108910892
+    },
+    "0.6": {
+      "lr_count": 466,
+      "lr_pct": 8.495897903372835,
+      "xgb_count": 40,
+      "xgb_pct": 0.7292616226071102,
+      "agreement_count": 39,
+      "jaccard_agreement": 8.35117773019272
+    },
+    "0.7": {
+      "lr_count": 317,
+      "lr_pct": 5.779398359161349,
+      "xgb_count": 17,
+      "xgb_pct": 0.3099361896080219,
+      "agreement_count": 17,
+      "jaccard_agreement": 5.3627760252365935
+    },
+    "0.8": {
+      "lr_count": 136,
+      "lr_pct": 2.479489516864175,
+      "xgb_count": 6,
+      "xgb_pct": 0.10938924339106655,
+      "agreement_count": 6,
+      "jaccard_agreement": 4.411764705882353
+    }
+  },
+  "best_threshold_for_agreement": 0.3
+}
