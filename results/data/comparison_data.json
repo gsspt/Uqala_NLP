@@ -1,18 +1,18 @@
 {
   "corpus": "data",
-  "total_akhbars": 36,
+  "total_akhbars": 198,
   "results": {
     "lr": {
-      "positives": 5,
-      "rate": 0.1388888888888889
+      "positives": 143,
+      "rate": 0.7222222222222222
     },
     "xgboost": {
-      "positives": 1,
-      "rate": 0.027777777777777776
+      "positives": 98,
+      "rate": 0.494949494949495
     },
     "ensemble": {
-      "positives": 2,
-      "rate": 0.05555555555555555
+      "positives": 120,
+      "rate": 0.6060606060606061
     }
   }
 }

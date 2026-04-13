@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-akhbar_extraction.py (v3 ISNAD-BASED)
-─────────────────────────────────────────────────────────────────
+akhbar_extraction_v3_isnad.py
+────────────────────────────────────────────────────────────────
 
 STRATÉGIE PHILOLOGIQUE CORRECTE:
-  1. Nettoyer le texte de TOUTES les métadonnées OpenITI
-  2. Chercher les ISNADS (chaînes de transmission) comme délimiteurs naturels
-  3. Chaque nouvel isnad = nouvel akhbar
-  4. Valider que chaque akhbar a une matn substantielle
+1. Nettoyer le texte de TOUTES les métadonnées OpenITI
+2. Chercher les ISNADS (chaînes de transmission) comme délimiteurs naturels
+3. Chaque nouvel isnad = nouvel akhbar
+4. Valider que chaque akhbar a une matn substantielle
 
 PRINCIPE:
   En arabe classique, chaque akhbar commence par une chaîne de transmission (isnad).
   Les métadonnées OpenITI (# |, ~~, PageXXX, etc.) ne reflètent que la structure du manuscrit,
   pas la structure narrative.
 
-v3 (this file) REPLACES v2_smart.
-PREVIOUS: v2_heuristic segmentation (1199 akhbars, 1.24M chars)
-CURRENT:  v3 isnad-based segmentation (857 akhbars, 1.64M chars, +401k chars recovered)
+Usage:
+  from akhbar_extraction_v3_isnad import extract_akhbars_from_file_v3
+  akhbars = extract_akhbars_from_file_v3('openiti_corpus/data/.../file.txt')
 """
 
 import re
