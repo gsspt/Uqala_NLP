@@ -1,0 +1,989 @@
+{
+  "semantic_fields": [
+    {
+      "field": "F_LOVE",
+      "precision": 0.238,
+      "recall": 0.222,
+      "lr_ratio": 2.59,
+      "n_pos": 102,
+      "xgb_pct": 22.7,
+      "terms": [
+        "حب",
+        "عشق",
+        "هوى",
+        "وجد",
+        "غرام"
+      ]
+    },
+    {
+      "field": "F_WISDOM",
+      "precision": 0.208,
+      "recall": 0.178,
+      "lr_ratio": 2.18,
+      "n_pos": 82,
+      "xgb_pct": 15.2,
+      "terms": [
+        "حكمه",
+        "عقل",
+        "فهم",
+        "ذكاء",
+        "لطيف"
+      ]
+    },
+    {
+      "field": "F_ASCETIC",
+      "precision": 0.235,
+      "recall": 0.152,
+      "lr_ratio": 2.55,
+      "n_pos": 70,
+      "xgb_pct": 13.6,
+      "terms": [
+        "زهد",
+        "توكل",
+        "دنيا",
+        "اخره",
+        "فناء"
+      ]
+    },
+    {
+      "field": "F_CROWD",
+      "precision": 0.114,
+      "recall": 0.241,
+      "lr_ratio": 1.06,
+      "n_pos": 111,
+      "xgb_pct": 33.3,
+      "terms": [
+        "ناس",
+        "قوم",
+        "جمع",
+        "جماعه",
+        "خلق"
+      ]
+    },
+    {
+      "field": "F_RUIN_SPACE",
+      "precision": 0.175,
+      "recall": 0.141,
+      "lr_ratio": 1.76,
+      "n_pos": 65,
+      "xgb_pct": 22.7,
+      "terms": [
+        "خراب",
+        "قبر",
+        "طريق",
+        "باب",
+        "زاويه"
+      ]
+    },
+    {
+      "field": "F_EMOTION_POS",
+      "precision": 0.279,
+      "recall": 0.083,
+      "lr_ratio": 3.22,
+      "n_pos": 38,
+      "xgb_pct": 3.0,
+      "terms": [
+        "بكى",
+        "تعجب",
+        "عجب",
+        "دهش",
+        "تفكر"
+      ]
+    },
+    {
+      "field": "F_PARADOX",
+      "precision": 0.11,
+      "recall": 0.17,
+      "lr_ratio": 1.02,
+      "n_pos": 78,
+      "xgb_pct": 21.2,
+      "terms": [
+        "لكن",
+        "مع",
+        "بينما",
+        "رغم",
+        "حين"
+      ]
+    },
+    {
+      "field": "F_POETRY",
+      "precision": 0.151,
+      "recall": 0.122,
+      "lr_ratio": 1.48,
+      "n_pos": 56,
+      "xgb_pct": 16.7,
+      "terms": [
+        "انشا",
+        "انشد",
+        "شعر",
+        "بيت",
+        "قصيده"
+      ]
+    },
+    {
+      "field": "F_GRIEF",
+      "precision": 0.269,
+      "recall": 0.061,
+      "lr_ratio": 3.06,
+      "n_pos": 28,
+      "xgb_pct": 1.5,
+      "terms": [
+        "حزن",
+        "بكاء",
+        "دمع",
+        "كمد",
+        "نحيب"
+      ]
+    },
+    {
+      "field": "F_CHILDREN",
+      "precision": 0.133,
+      "recall": 0.115,
+      "lr_ratio": 1.27,
+      "n_pos": 53,
+      "xgb_pct": 19.7,
+      "terms": [
+        "صبي",
+        "ولد",
+        "غلام",
+        "اطفال",
+        "صبيان"
+      ]
+    },
+    {
+      "field": "F_WANDER",
+      "precision": 0.156,
+      "recall": 0.096,
+      "lr_ratio": 1.53,
+      "n_pos": 44,
+      "xgb_pct": 15.2,
+      "terms": [
+        "هام",
+        "طاف",
+        "جال",
+        "هرب",
+        "ضل"
+      ]
+    },
+    {
+      "field": "F_APPEAR_FOOL",
+      "precision": 0.161,
+      "recall": 0.087,
+      "lr_ratio": 1.6,
+      "n_pos": 40,
+      "xgb_pct": 6.1,
+      "terms": [
+        "اشعث",
+        "رث",
+        "عار",
+        "نحيف",
+        "هزيل"
+      ]
+    },
+    {
+      "field": "F_AUTHORITY",
+      "precision": 0.037,
+      "recall": 0.046,
+      "lr_ratio": 0.32,
+      "n_pos": 21,
+      "xgb_pct": 24.2,
+      "terms": [
+        "خليفه",
+        "ملك",
+        "وزير",
+        "سلطان",
+        "امير"
+      ]
+    },
+    {
+      "field": "F_GIFT",
+      "precision": 0.101,
+      "recall": 0.015,
+      "lr_ratio": 0.94,
+      "n_pos": 7,
+      "xgb_pct": 6.1,
+      "terms": [
+        "اعطى",
+        "اهدى",
+        "بذل",
+        "كرم",
+        "عطا"
+      ]
+    },
+    {
+      "field": "F_FORMAL_REL",
+      "precision": 0.015,
+      "recall": 0.011,
+      "lr_ratio": 0.12,
+      "n_pos": 5,
+      "xgb_pct": 1.5,
+      "terms": [
+        "حدثنا",
+        "اخبرنا",
+        "روى",
+        "عن",
+        "اسناد"
+      ]
+    },
+    {
+      "field": "F_QUESTION",
+      "precision": 0.0,
+      "recall": 0.0,
+      "lr_ratio": 0.0,
+      "n_pos": 0,
+      "xgb_pct": 0.0,
+      "terms": [
+        "ما",
+        "كيف",
+        "لم",
+        "من",
+        "هل"
+      ]
+    }
+  ],
+  "cooccurrence": [
+    {
+      "term": "قال",
+      "precision": 0.836,
+      "recall": 0.311,
+      "lr_ratio": 42.38,
+      "n_pos": 143,
+      "n_neg": 28,
+      "xgb_pct": 4.5,
+      "certainty": 0.25997
+    },
+    {
+      "term": "كان",
+      "precision": 0.806,
+      "recall": 0.117,
+      "lr_ratio": 34.47,
+      "n_pos": 54,
+      "n_neg": 13,
+      "xgb_pct": 1.5,
+      "certainty": 0.09461
+    },
+    {
+      "term": "راوند",
+      "precision": 0.902,
+      "recall": 0.1,
+      "lr_ratio": 76.34,
+      "n_pos": 46,
+      "n_neg": 5,
+      "xgb_pct": 0.0,
+      "certainty": 0.0902
+    },
+    {
+      "term": "دخل",
+      "precision": 1.0,
+      "recall": 0.063,
+      "lr_ratio": 240.64,
+      "n_pos": 29,
+      "n_neg": 0,
+      "xgb_pct": 0.0,
+      "certainty": 0.06304
+    },
+    {
+      "term": "يوم",
+      "precision": 0.933,
+      "recall": 0.061,
+      "lr_ratio": 116.17,
+      "n_pos": 28,
+      "n_neg": 2,
+      "xgb_pct": 0.0,
+      "certainty": 0.05681
+    },
+    {
+      "term": "عض",
+      "precision": 0.893,
+      "recall": 0.054,
+      "lr_ratio": 69.15,
+      "n_pos": 25,
+      "n_neg": 3,
+      "xgb_pct": 0.0,
+      "certainty": 0.04852
+    },
+    {
+      "term": "كتب",
+      "precision": 1.0,
+      "recall": 0.046,
+      "lr_ratio": 174.25,
+      "n_pos": 21,
+      "n_neg": 0,
+      "xgb_pct": 1.5,
+      "certainty": 0.04565
+    },
+    {
+      "term": "مر",
+      "precision": 0.87,
+      "recall": 0.043,
+      "lr_ratio": 55.32,
+      "n_pos": 20,
+      "n_neg": 3,
+      "xgb_pct": 0.0,
+      "certainty": 0.03781
+    }
+  ],
+  "positional": {
+    "scene_intro_first": {
+      "precision": 0.233,
+      "recall": 0.35,
+      "lr_ratio": 2.52,
+      "n_pos": 161,
+      "xgb_pct": 33.3
+    },
+    "scene_intro_last": {
+      "precision": 0.091,
+      "recall": 0.1,
+      "lr_ratio": 0.83,
+      "n_pos": 46,
+      "xgb_pct": 18.2
+    },
+    "junun_first": {
+      "precision": 0.867,
+      "recall": 0.396,
+      "lr_ratio": 53.94,
+      "n_pos": 182,
+      "xgb_pct": 3.0
+    },
+    "junun_last": {
+      "precision": 0.644,
+      "recall": 0.102,
+      "lr_ratio": 15.0,
+      "n_pos": 47,
+      "xgb_pct": 6.1
+    },
+    "poetry_intro_first": {
+      "precision": 0.357,
+      "recall": 0.033,
+      "lr_ratio": 4.61,
+      "n_pos": 15,
+      "xgb_pct": 1.5
+    },
+    "poetry_intro_last": {
+      "precision": 0.333,
+      "recall": 0.065,
+      "lr_ratio": 4.15,
+      "n_pos": 30,
+      "xgb_pct": 7.6
+    },
+    "question_ya_first": {
+      "precision": 0,
+      "recall": 0.0,
+      "lr_ratio": 0.0,
+      "n_pos": 0,
+      "xgb_pct": 0.0
+    },
+    "question_ya_last": {
+      "precision": 0,
+      "recall": 0.0,
+      "lr_ratio": 0.0,
+      "n_pos": 0,
+      "xgb_pct": 0.0
+    },
+    "wisdom_first": {
+      "precision": 0.301,
+      "recall": 0.061,
+      "lr_ratio": 3.57,
+      "n_pos": 28,
+      "xgb_pct": 9.1
+    },
+    "wisdom_last": {
+      "precision": 0.212,
+      "recall": 0.054,
+      "lr_ratio": 2.23,
+      "n_pos": 25,
+      "xgb_pct": 4.5
+    },
+    "grief_first": {
+      "precision": 0.308,
+      "recall": 0.026,
+      "lr_ratio": 3.69,
+      "n_pos": 12,
+      "xgb_pct": 0.0
+    },
+    "grief_last": {
+      "precision": 0.25,
+      "recall": 0.03,
+      "lr_ratio": 2.77,
+      "n_pos": 14,
+      "xgb_pct": 1.5
+    }
+  },
+  "pmi_new": [
+    {
+      "term": "سمنون",
+      "pmi": 3.217,
+      "precision": 1.0,
+      "recall": 0.022,
+      "n_pos": 10,
+      "n_total": 10,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "حيونه",
+      "pmi": 3.217,
+      "precision": 1.0,
+      "recall": 0.024,
+      "n_pos": 11,
+      "n_total": 11,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "جعيفران",
+      "pmi": 3.065,
+      "precision": 0.9,
+      "recall": 0.02,
+      "n_pos": 9,
+      "n_total": 10,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "خرابة",
+      "pmi": 3.047,
+      "precision": 0.889,
+      "recall": 0.017,
+      "n_pos": 8,
+      "n_total": 9,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "مجنون؟",
+      "pmi": 3.024,
+      "precision": 0.875,
+      "recall": 0.015,
+      "n_pos": 7,
+      "n_total": 8,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "موسوس",
+      "pmi": 2.976,
+      "precision": 0.846,
+      "recall": 0.024,
+      "n_pos": 11,
+      "n_total": 13,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "أنشأ",
+      "pmi": 2.93,
+      "precision": 0.819,
+      "recall": 0.128,
+      "n_pos": 59,
+      "n_total": 72,
+      "xgb_pct": 4.5
+    },
+    {
+      "term": "عنوان",
+      "pmi": 2.927,
+      "precision": 0.818,
+      "recall": 0.02,
+      "n_pos": 9,
+      "n_total": 11,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "مقيد",
+      "pmi": 2.917,
+      "precision": 0.812,
+      "recall": 0.028,
+      "n_pos": 13,
+      "n_total": 16,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "مغشى",
+      "pmi": 2.895,
+      "precision": 0.8,
+      "recall": 0.017,
+      "n_pos": 8,
+      "n_total": 10,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "زدني",
+      "pmi": 2.802,
+      "precision": 0.75,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 8,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "ريحان",
+      "pmi": 2.757,
+      "precision": 0.727,
+      "recall": 0.017,
+      "n_pos": 8,
+      "n_total": 11,
+      "xgb_pct": 1.5
+    },
+    {
+      "term": "الوجد",
+      "pmi": 2.632,
+      "precision": 0.667,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 9,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "ناجى",
+      "pmi": 2.632,
+      "precision": 0.667,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 9,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "زنى",
+      "pmi": 2.632,
+      "precision": 0.667,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 9,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "حجب",
+      "pmi": 2.579,
+      "precision": 0.643,
+      "recall": 0.02,
+      "n_pos": 9,
+      "n_total": 14,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "ضمير",
+      "pmi": 2.565,
+      "precision": 0.636,
+      "recall": 0.015,
+      "n_pos": 7,
+      "n_total": 11,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "سطح",
+      "pmi": 2.565,
+      "precision": 0.636,
+      "recall": 0.015,
+      "n_pos": 7,
+      "n_total": 11,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "أنسى",
+      "pmi": 2.565,
+      "precision": 0.636,
+      "recall": 0.015,
+      "n_pos": 7,
+      "n_total": 11,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "حياء",
+      "pmi": 2.539,
+      "precision": 0.625,
+      "recall": 0.022,
+      "n_pos": 10,
+      "n_total": 16,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "وداد",
+      "pmi": 2.539,
+      "precision": 0.625,
+      "recall": 0.011,
+      "n_pos": 5,
+      "n_total": 8,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "اسمك؟",
+      "pmi": 2.539,
+      "precision": 0.625,
+      "recall": 0.011,
+      "n_pos": 5,
+      "n_total": 8,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "عبدالله",
+      "pmi": 2.516,
+      "precision": 0.615,
+      "recall": 0.017,
+      "n_pos": 8,
+      "n_total": 13,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "رحمة",
+      "pmi": 2.48,
+      "precision": 0.6,
+      "recall": 0.033,
+      "n_pos": 15,
+      "n_total": 25,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "هنا؟",
+      "pmi": 2.48,
+      "precision": 0.6,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 10,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "تنفس",
+      "pmi": 2.48,
+      "precision": 0.6,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 10,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "ذاهب",
+      "pmi": 2.48,
+      "precision": 0.6,
+      "recall": 0.026,
+      "n_pos": 12,
+      "n_total": 20,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "مشدود",
+      "pmi": 2.48,
+      "precision": 0.6,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 10,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "جاب",
+      "pmi": 2.439,
+      "precision": 0.583,
+      "recall": 0.015,
+      "n_pos": 7,
+      "n_total": 12,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "ليلى",
+      "pmi": 2.433,
+      "precision": 0.581,
+      "recall": 0.039,
+      "n_pos": 18,
+      "n_total": 31,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "عشق",
+      "pmi": 2.369,
+      "precision": 0.556,
+      "recall": 0.022,
+      "n_pos": 10,
+      "n_total": 18,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "زود",
+      "pmi": 2.369,
+      "precision": 0.556,
+      "recall": 0.011,
+      "n_pos": 5,
+      "n_total": 9,
+      "xgb_pct": 1.5
+    },
+    {
+      "term": "ولم؟",
+      "pmi": 2.369,
+      "precision": 0.556,
+      "recall": 0.011,
+      "n_pos": 5,
+      "n_total": 9,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "مرحبا",
+      "pmi": 2.342,
+      "precision": 0.545,
+      "recall": 0.013,
+      "n_pos": 6,
+      "n_total": 11,
+      "xgb_pct": 0.0
+    },
+    {
+      "term": "محبة",
+      "pmi": 2.342,
+      "precision": 0.545,
+      "recall": 0.026,
+      "n_pos": 12,
+      "n_total": 22,
+      "xgb_pct": 1.5
+    }
+  ],
+  "trigrams": [],
+  "negative_signals": [
+    {
+      "term": "أحمد",
+      "neg_precision": 0.99,
+      "neg_recall": 0.127,
+      "n_neg": 483,
+      "n_pos": 5
+    },
+    {
+      "term": "روى",
+      "neg_precision": 0.985,
+      "neg_recall": 0.087,
+      "n_neg": 332,
+      "n_pos": 5
+    },
+    {
+      "term": "حديث",
+      "neg_precision": 0.971,
+      "neg_recall": 0.088,
+      "n_neg": 334,
+      "n_pos": 10
+    },
+    {
+      "term": "حسين",
+      "neg_precision": 0.987,
+      "neg_recall": 0.078,
+      "n_neg": 298,
+      "n_pos": 4
+    },
+    {
+      "term": "إبراهيم",
+      "neg_precision": 0.986,
+      "neg_recall": 0.076,
+      "n_neg": 292,
+      "n_pos": 4
+    },
+    {
+      "term": "قتل",
+      "neg_precision": 0.969,
+      "neg_recall": 0.073,
+      "n_neg": 277,
+      "n_pos": 9
+    },
+    {
+      "term": "عباس",
+      "neg_precision": 0.989,
+      "neg_recall": 0.071,
+      "n_neg": 272,
+      "n_pos": 3
+    },
+    {
+      "term": "جعفر",
+      "neg_precision": 0.972,
+      "neg_recall": 0.072,
+      "n_neg": 276,
+      "n_pos": 8
+    },
+    {
+      "term": "عمرو",
+      "neg_precision": 0.982,
+      "neg_recall": 0.07,
+      "n_neg": 268,
+      "n_pos": 5
+    },
+    {
+      "term": "يحيى",
+      "neg_precision": 0.996,
+      "neg_recall": 0.066,
+      "n_neg": 251,
+      "n_pos": 1
+    },
+    {
+      "term": "عبيد",
+      "neg_precision": 0.992,
+      "neg_recall": 0.061,
+      "n_neg": 234,
+      "n_pos": 2
+    },
+    {
+      "term": "إسحاق",
+      "neg_precision": 0.991,
+      "neg_recall": 0.06,
+      "n_neg": 229,
+      "n_pos": 2
+    },
+    {
+      "term": "سعيد",
+      "neg_precision": 0.959,
+      "neg_recall": 0.062,
+      "n_neg": 236,
+      "n_pos": 10
+    },
+    {
+      "term": "قاسم",
+      "neg_precision": 0.978,
+      "neg_recall": 0.059,
+      "n_neg": 224,
+      "n_pos": 5
+    },
+    {
+      "term": "واحد",
+      "neg_precision": 0.961,
+      "neg_recall": 0.058,
+      "n_neg": 222,
+      "n_pos": 9
+    },
+    {
+      "term": "عثمان",
+      "neg_precision": 0.986,
+      "neg_recall": 0.056,
+      "n_neg": 214,
+      "n_pos": 3
+    },
+    {
+      "term": "فضل",
+      "neg_precision": 0.977,
+      "neg_recall": 0.056,
+      "n_neg": 214,
+      "n_pos": 5
+    },
+    {
+      "term": "بغداد",
+      "neg_precision": 0.968,
+      "neg_recall": 0.056,
+      "n_neg": 214,
+      "n_pos": 7
+    },
+    {
+      "term": "قاضي",
+      "neg_precision": 0.972,
+      "neg_recall": 0.055,
+      "n_neg": 210,
+      "n_pos": 6
+    },
+    {
+      "term": "كثير",
+      "neg_precision": 0.953,
+      "neg_recall": 0.053,
+      "n_neg": 204,
+      "n_pos": 10
+    },
+    {
+      "term": "أربع",
+      "neg_precision": 0.97,
+      "neg_recall": 0.05,
+      "n_neg": 191,
+      "n_pos": 6
+    },
+    {
+      "term": "إسماعيل",
+      "neg_precision": 0.984,
+      "neg_recall": 0.049,
+      "n_neg": 186,
+      "n_pos": 3
+    },
+    {
+      "term": "مسلم",
+      "neg_precision": 0.989,
+      "neg_recall": 0.048,
+      "n_neg": 184,
+      "n_pos": 2
+    },
+    {
+      "term": "سليمان",
+      "neg_precision": 0.967,
+      "neg_recall": 0.046,
+      "n_neg": 175,
+      "n_pos": 6
+    },
+    {
+      "term": "سبع",
+      "neg_precision": 0.983,
+      "neg_recall": 0.045,
+      "n_neg": 171,
+      "n_pos": 3
+    },
+    {
+      "term": "موسى",
+      "neg_precision": 0.95,
+      "neg_recall": 0.045,
+      "n_neg": 171,
+      "n_pos": 9
+    },
+    {
+      "term": "خبر",
+      "neg_precision": 0.96,
+      "neg_recall": 0.044,
+      "n_neg": 167,
+      "n_pos": 7
+    },
+    {
+      "term": "ربيع",
+      "neg_precision": 0.976,
+      "neg_recall": 0.043,
+      "n_neg": 166,
+      "n_pos": 4
+    },
+    {
+      "term": "خمس",
+      "neg_precision": 0.976,
+      "neg_recall": 0.042,
+      "n_neg": 162,
+      "n_pos": 4
+    },
+    {
+      "term": "عنى",
+      "neg_precision": 0.994,
+      "neg_recall": 0.04,
+      "n_neg": 154,
+      "n_pos": 1
+    }
+  ],
+  "recommended": [
+    {
+      "source": "cooc",
+      "name": "قال",
+      "prec": 0.836,
+      "rec": 0.311,
+      "lr": 42.38,
+      "xgb": 4.5,
+      "desc": "voisinage junun"
+    },
+    {
+      "source": "cooc",
+      "name": "كان",
+      "prec": 0.806,
+      "rec": 0.117,
+      "lr": 34.47,
+      "xgb": 1.5,
+      "desc": "voisinage junun"
+    },
+    {
+      "source": "cooc",
+      "name": "راوند",
+      "prec": 0.902,
+      "rec": 0.1,
+      "lr": 76.34,
+      "xgb": 0.0,
+      "desc": "voisinage junun"
+    },
+    {
+      "source": "cooc",
+      "name": "دخل",
+      "prec": 1.0,
+      "rec": 0.063,
+      "lr": 240.64,
+      "xgb": 0.0,
+      "desc": "voisinage junun"
+    },
+    {
+      "source": "cooc",
+      "name": "يوم",
+      "prec": 0.933,
+      "rec": 0.061,
+      "lr": 116.17,
+      "xgb": 0.0,
+      "desc": "voisinage junun"
+    }
+  ]
+}
