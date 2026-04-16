@@ -17,7 +17,7 @@ Chaque feature est documentée avec :
 Usage :
     from src.uqala_nlp.features.bow_features_v0 import extract_bow_features_v0
     features = extract_bow_features_v0(text)
-    # → dict ordonné de 13 features (B01–B10 positives, BN01–BN03 négatives)
+    # → dict ordonné de 10 features (B01–B10)
 """
 
 import re
@@ -123,28 +123,6 @@ DATE_SCENE = {
     'يوما من الأيام',
 }
 
-# ── SIGNAUX NÉGATIFS ──────────────────────────────────────────────────────────
-
-# Noms de chaînes isnad (prec_neg ≥ 0.97)
-ISNAD_NAMES = {
-    'أحمد','حسين','الحسين','إبراهيم','يحيى','عبيد',
-    'إسحاق','إسماعيل','مسلم','سليمان','عثمان',
-}
-
-# Marqueurs formels de transmission
-HADITH_MARKERS = {
-    'حدثنا','حدثني','أخبرنا','أخبرني','روى','روينا',
-    'قال حدثنا','أخبرنا عن','رواه',
-}
-
-# Vocabulaire historico-politique lourd (signal d'exclusion)
-AUTHORITY_HEAVY = {
-    'الخليفة','خليفة','خليفه','خلافة',
-    'الوزير','وزير',
-    'السلطان','سلطان',
-    'أمير المؤمنين',
-}
-
 
 # ══════════════════════════════════════════════════════════════════════════════
 # EXTRACTION DES FEATURES
@@ -152,13 +130,13 @@ AUTHORITY_HEAVY = {
 
 def extract_bow_features_v0(text: str) -> dict:
     """
-    Extrait les 13 features BoW v0 d'un akhbar arabe.
+    Extrait les 10 features BoW v0 d'un akhbar arabe.
 
     Paramètre :
         text : str — texte brut (avec ou sans isnad, OpenITI ou propre)
 
     Retourne :
-        dict ordonné — clés B01..B10, BN01..BN03
+        dict ordonné — clés B01..B10
         Valeurs : float [0.0, 1.0] ou int {0, 1}
     """
     t = _norm(text)
@@ -242,25 +220,6 @@ def extract_bow_features_v0(text: str) -> dict:
         _window_cooc(t, DHAHIB_AQL, AQL_TERMS, window=4)
     )
 
-    # ── BN01 : Noms d'isnad (signal d'exclusion) ──────────────────────────────
-    # prec_neg ≥ 0.97 pour ces noms
-    # Leur présence signale des textes de hadith, biographie ou histoire —
-    # genres riches en dialogue qui trompent le modèle.
-    # Compter le nombre de noms distincts présents.
-    n_isnad_names = len(ISNAD_NAMES & set(toks))
-    features['BN01_isnad_names'] = min(float(n_isnad_names) / 3.0, 1.0)
-
-    # ── BN02 : Marqueurs formels de transmission ───────────────────────────────
-    # prec_neg ≥ 0.98 pour روى/حدثنا/أخبرنا
-    # Isnad explicite → texte de hadith ou histoire formelle.
-    features['BN02_hadith_markers'] = float(bool(HADITH_MARKERS & set(toks)))
-
-    # ── BN03 : Vocabulaire politico-historique lourd ───────────────────────────
-    # prec_neg ≈ 0.96 pour خليفة/وزير/سلطان
-    # L'autorité institutionnelle est un contexte anti-majnun-aqil
-    # (sauf les rares scènes où le fou interpelle le calife — couvertes par v80 f12).
-    features['BN03_authority_heavy'] = float(bool(AUTHORITY_HEAVY & set(toks)))
-
     return features
 
 
@@ -276,9 +235,6 @@ _FEATURE_KEYS = [
     'B08_chained_fool',
     'B09_bite_behavior',
     'B10_dhahib_aql',
-    'BN01_isnad_names',
-    'BN02_hadith_markers',
-    'BN03_authority_heavy',
 ]
 
 def feature_names() -> list:
@@ -302,18 +258,14 @@ if __name__ == '__main__':
         ("VRAI_AMOUR",
          "ذات يوم مررت برجل في السوق وكان يعشق فتاة ويهيم بها حبا "
          "فسألته عن حاله فأنشأ يقول شعرا في وصف عشقه وحبه وهواه"),
-        # Faux positif — isnad historique
-        ("FAUX_ISNAD",
-         "حدثنا أحمد بن إبراهيم قال أخبرنا يحيى عن إسحاق قال قتل "
-         "الخليفة وزيره في بغداد وروى عنه عثمان هذا الحديث"),
     ]
 
-    print(f"\n{'─'*75}")
-    print(f"  {'Feature':<30} {'VRAI':>8} {'VRAI_AMOUR':>12} {'FAUX_ISNAD':>12}")
-    print(f"{'─'*75}")
+    print(f"\n{'─'*60}")
+    print(f"  {'Feature':<30} {'VRAI':>8} {'VRAI_AMOUR':>12}")
+    print(f"{'─'*60}")
 
     results = {label: extract_bow_features_v0(text) for label, text in SAMPLES}
     for key in _FEATURE_KEYS:
         vals = [f"{results[label][key]:.2f}" for label, _ in SAMPLES]
-        print(f"  {key:<30} {vals[0]:>8} {vals[1]:>12} {vals[2]:>12}")
-    print(f"{'─'*75}")
+        print(f"  {key:<30} {vals[0]:>8} {vals[1]:>12}")
+    print(f"{'─'*60}")

@@ -8,7 +8,7 @@
 
 ## Résumé
 
-Ces 13 features (B01–B10 positives, BN01–BN03 négatives) ont été découvertes par trois analyses successives :
+Ces 10 features (B01–B10) ont été découvertes par trois analyses successives :
 
 | Script | Méthode | Découvertes clés |
 |--------|---------|-----------------|
@@ -229,68 +229,6 @@ Paraphrase non-lexicale de la folie : "dont la raison est partie" sans utiliser 
 
 ---
 
-## Features négatives / d'exclusion (BN01–BN03)
-
-Ces features signalent que le texte appartient probablement à un autre genre. Dans un classifieur, elles doivent avoir un coefficient **négatif**.
-
----
-
-### BN01 — `f_isnad_names` ↓
-
-**Valeur** : float [0.0, 1.0] — normalisée sur 3 noms maximum
-
-```python
-ISNAD_NAMES = {'أحمد','حسين','إبراهيم','يحيى','عبيد','إسحاق',...}
-BN01 = min(count(ISNAD_NAMES ∩ tokens) / 3, 1.0)
-```
-
-**Statistiques** :
-| Nom | Prec(négatif) | Rapp(négatif) |
-|-----|--------------|--------------|
-| أحمد | **0.990** | 12.7% |
-| يحيى | **0.996** | 6.6% |
-| عبيد | **0.992** | 6.1% |
-| إسحاق | **0.991** | 6.0% |
-
-**Justification** :  
-Ces prénoms apparaissent massivement dans les chaînes de transmission (*isnad*) du hadith et de l'histoire. Leur co-présence multiple dans un texte signale avec 99%+ de certitude un texte de genre formel (hadith, sīra, histoire politique), jamais un *khabar* de majnun aqil.
-
----
-
-### BN02 — `f_hadith_markers` ↓
-
-**Valeur** : binaire {0, 1}
-
-```python
-HADITH_MARKERS = {'حدثنا','حدثني','أخبرنا','أخبرني','روى','روينا',...}
-```
-
-**Statistiques** :
-- Prec(négatif) : **0.985** pour روى/حدثنا
-- Rappel(négatif) : 8.7%
-
-**Justification** :  
-Les formules de transmission formelle du hadith sont structurellement incompatibles avec un récit de majnun aqil (genres mutuellement exclusifs). Un texte qui commence par "حدثنا X عن Y" ne sera jamais un khabar de fou sage.
-
----
-
-### BN03 — `f_authority_heavy` ↓
-
-**Valeur** : binaire {0, 1}
-
-```python
-AUTHORITY_HEAVY = {'الخليفة','خليفة','الوزير','وزير','السلطان','أمير المؤمنين',...}
-```
-
-**Statistiques** :
-- Prec(négatif) ≈ **0.963**
-- Rapp(négatif) ≈ 5.6%
-
-**Justification** :  
-Le vocabulaire institutionnel lourd (خليفة, وزير, سلطان) signale des textes d'histoire politique ou d'adab officiel. *Attention* : il existe des récits de majnun aqil où le fou interpelle un calife (feature f12 de v80 gère ce cas comme signal positif dans le bon contexte). BN03 capture les textes où ce vocabulaire domine sans contexte de folie.
-
----
-
 ## Intégration avec v80
 
 Les features BoW v0 sont **complémentaires** aux features v80 :
@@ -302,7 +240,7 @@ Les features BoW v0 sont **complémentaires** aux features v80 :
 | Dialogue | densité قال, 1ère personne | co-occurrence عض+مجنون (B09) |
 | Poésie | absent | formule transition (B02) |
 | Sous-genres | absent | amour (B04), enchaîné (B08), موسوس (B07) |
-| Faux positifs | f12_junun_positive | isnad names (BN01), hadith (BN02) |
+| Faux positifs | f12_junun_positive | — |
 
 **Fusion recommandée** :
 ```python
@@ -310,15 +248,15 @@ from src.uqala_nlp.features.bow_features_v0 import extract_bow_features_v0
 from pipelines.level1_interpretable.p1_4_logistic_regression_v80 import extract_all_features_27
 
 v80_feats = list(extract_all_features_27(text).values())     # 27 features
-bow_feats  = list(extract_bow_features_v0(text).values())    # 13 features
-combined   = v80_feats + bow_feats                           # 40 features total
+bow_feats  = list(extract_bow_features_v0(text).values())    # 10 features
+combined   = v80_feats + bow_feats                           # 37 features total
 ```
 
 ---
 
 ## Roadmap
 
-- **v0** (actuel) : 13 features, string matching, pas de dépendance CAMeL
+- **v0** (actuel) : 10 features, string matching, pas de dépendance CAMeL
 - **v1** : intégration des racines CAMeL (ج.ن.ن density via MLE) pour B01 amélioré
 - **v2** : features positionnelles fines (poésie en dernier tiers, scène en premier tiers)
 - **v3** : features de co-occurrence CAMeL (lemmes dans fenêtre) pour réduire faux positifs morphologiques
